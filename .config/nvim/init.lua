@@ -57,6 +57,9 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Better looking fill char for diffview
+vim.opt.fillchars:append({ diff = '╱' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
@@ -91,6 +94,11 @@ vim.keymap.set({ 'n', 'v' }, 'g<Left>', '^', { desc = 'Go to start of line' })
 vim.keymap.set({ 'n', 'v' }, 'gh', '^', { desc = 'Go to start of line' })
 vim.keymap.set({ 'n', 'v' }, 'g<Right>', '$', { desc = 'Go to end of line' })
 vim.keymap.set({ 'n', 'v' }, 'gl', '$', { desc = 'Go to end of line' })
+
+-- Copy current file path to clipboard
+vim.keymap.set('n', '<leader>cp', function()
+  vim.fn.setreg('*', vim.fn.expand('%'))
+end, { desc = 'Copy Path' })
 
 -- Highlight when yanking text
 vim.api.nvim_create_autocmd('TextYankPost', {

@@ -26,9 +26,9 @@ return {
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby', 'python' },
+        additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby', 'python' } },
+      indent = { enable = true, disable = { 'ruby' } },
       incremental_selection = {
         enable = true,
         keymaps = {
@@ -91,6 +91,7 @@ return {
             ['as'] = '@statement.outer',
             ['ib'] = '@block.inner',
             ['ab'] = '@block.outer',
+            ['al'] = '@loop.outer',
           },
           selection_modes = {
             ['@parameter.outer'] = 'v', -- charwise
@@ -102,7 +103,15 @@ return {
     },
   },
   -- Show context on top of object/functions/class
-  { 'nvim-treesitter/nvim-treesitter-context', opts = {} },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    opts = {
+      -- Settings to match VSCode behavior
+      max_lines = 2,
+      -- Inner scope (e.g. loops, if-else) are discareded first
+      trim_scope = 'inner',
+    },
+  },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
     config = function(_, opts)

@@ -20,19 +20,6 @@ return {
       vim.keymap.set('n', '<leader>gc', function()
         neogit.open({ 'commit' })
       end, { desc = '[G]it [C]ommit' })
-
-      vim.keymap.set('n', '<leader>gh', function()
-        -- TODO: cleanup lmao
-        require('neogit.popups.log.actions').log_current({
-          get_internal_arguments = function(_)
-            return {}
-          end,
-          get_arguments = function(_)
-            return {}
-          end,
-          state = { env = { files = { vim.fn.expand('%') } } },
-        })
-      end, { desc = '[G]it File [H]istory' })
     end,
   },
   -- Show git diffs
@@ -41,6 +28,11 @@ return {
     opts = {},
     keys = {
       { '<leader>gd', '<cmd>DiffviewOpen<cr>', desc = '[G]it [D]iff' },
+      {
+        '<leader>gh',
+        '<cmd>DiffviewFileHistory %<cr>',
+        desc = '[G]it File [H]istory',
+      },
     },
   },
   -- More detailed line blame

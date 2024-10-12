@@ -21,6 +21,40 @@ local function get_selected_text()
   return text
 end
 
+function string.starts(String, Start)
+  return string.sub(String, 1, string.len(Start)) == Start
+end
+
+local function file_name_first(_, path)
+  local tail = vim.fs.basename(path)
+  local parent = vim.fs.dirname(path)
+  local cwd = vim.fn.getcwd()
+
+  if parent == '.' then
+    return tail
+  elseif string.starts(parent, cwd) then
+    -- Remove cwd in path if exists
+    -- e.g. if cwd = /user/project and parent = /user/project/file
+    -- format parent = file
+    parent = string.sub(parent, string.len(cwd) + 2, string.len(parent))
+  end
+
+  -- Use two tabs to delimit filename and path
+  return string.format('%s\t\t%s\t\t', tail, parent)
+end
+
+-- Colors everything after two tabs like comments
+-- Works in conjunction with function above to color the paths
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'TelescopeResults',
+  callback = function(ctx)
+    vim.api.nvim_buf_call(ctx.buf, function()
+      vim.fn.matchadd('TelescopeParent', '\t\t.*\t\t')
+      vim.api.nvim_set_hl(0, 'TelescopeParent', { link = 'Comment' })
+    end)
+  end,
+})
+
 return {
   -- Fuzzy finder
   {
@@ -48,7 +82,9 @@ return {
       require('telescope').setup({
         defaults = {
           file_ignore_patterns = { 'node_modules' },
-          -- path_display = { 'smart' },
+          path_display = file_name_first,
+          -- More horizontal space for long file paths
+          layout_strategy = 'vertical',
         },
         extensions = {
           ['ui-select'] = {
@@ -63,6 +99,8 @@ return {
       pcall(require('telescope').load_extension, 'recent_files')
 
       local builtin = require('telescope.builtin')
+      local actions_state = require('telescope.actions.state')
+      local actions = require('telescope.actions')
 
       vim.keymap.set(
         'n',
@@ -107,7 +145,6 @@ return {
         { desc = '[F]ind current [W]ord' }
       )
       vim.keymap.set({ 'n', 'v' }, '<leader>fg', function()
-        -- TODO: wait that option was set up top
         builtin.live_grep({
           default_text = get_selected_text(),
         })
@@ -150,8 +187,30 @@ return {
       vim.keymap.set('n', '<leader>fn', function()
         builtin.find_files({ cwd = vim.fn.stdpath('config') })
       end, { desc = '[F]ind [N]eovim files' })
+
+      local open_commit = function(prompt_buffer)
+        local selected = actions_state.get_selected_entry()
+        actions.close(prompt_buffer)
+
+        if selected.value then
+          -- Open commit using diffview
+          vim.cmd(
+            ':DiffviewOpen ' .. selected.value .. '~1..' .. selected.value
+          )
+        end
+      end
+
+      vim.keymap.set('n', '<leader>fc', function()
+        builtin.git_commits({
+          attach_mappings = function(_, map)
+            map({ 'n', 'i' }, '<cr>', open_commit)
+            return true
+          end,
+        })
+      end, { desc = '[F]ind Git [C]ommits' })
     end,
-  }, -- Search and replace
+  },
+  -- Search and replace
   {
     'MagicDuck/grug-far.nvim',
     opts = {},
