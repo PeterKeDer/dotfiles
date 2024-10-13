@@ -23,13 +23,34 @@ return {
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'onsails/lspkind.nvim',
     },
     config = function()
       local cmp = require('cmp')
       local luasnip = require('luasnip')
       luasnip.config.setup({})
 
+      local lspkind = require('lspkind')
+
+      local jump_next = cmp.mapping(function()
+        if luasnip.expand_or_locally_jumpable() then
+          luasnip.expand_or_jump()
+        end
+      end, { 'i', 's' })
+      local jump_prev = cmp.mapping(function()
+        if luasnip.locally_jumpable(-1) then
+          luasnip.jump(-1)
+        end
+      end, { 'i', 's' })
+
       cmp.setup({
+        formatting = {
+          fields = { 'kind', 'abbr', 'menu' },
+          format = lspkind.cmp_format({
+            mode = 'symbol',
+            maxwidth = 50,
+          }),
+        },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -74,16 +95,10 @@ return {
           --
           -- <c-l> will move you to the right of each of the expansion locations.
           -- <c-h> is similar, except moving you backwards.
-          ['<C-l>'] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { 'i', 's' }),
-          ['<C-h>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { 'i', 's' }),
+          ['<C-l>'] = jump_next,
+          ['<C-Right>'] = jump_next,
+          ['<C-h>'] = jump_prev,
+          ['<C-Left>'] = jump_prev,
         }),
         sources = {
           {

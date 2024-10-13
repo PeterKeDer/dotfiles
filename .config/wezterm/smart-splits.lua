@@ -1,6 +1,5 @@
-require('helpers')
-
-local wezterm = require('wezterm')
+local h = require('helpers')
+local wezterm = require('wezterm') --[[@as Wezterm]]
 
 -- Use CTRL + hjkl or arrow keys to move around
 local direction_keys = {
@@ -19,7 +18,7 @@ local function split_nav(resize_or_move, key)
     key = key,
     mods = resize_or_move == 'resize' and 'META' or 'CTRL',
     action = wezterm.action_callback(function(win, pane)
-      if IsNvim(pane) then
+      if h.is_nvim(pane) then
         -- pass the keys through to vim/nvim
         win:perform_action({
           SendKey = {

@@ -35,7 +35,7 @@ return {
           init_selection = '<cr>',
           node_incremental = '<cr>',
           scope_incremental = '<C-cr>',
-          node_decremental = '<S-cr>',
+          node_decremental = '<Backspace>',
         },
       },
       textobjects = {

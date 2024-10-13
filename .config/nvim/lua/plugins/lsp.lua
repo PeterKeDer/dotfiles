@@ -177,6 +177,26 @@ return {
           },
         },
         bzl = {},
+        clangd = {},
+        jsonls = {
+          settings = {
+
+            schemas = require('schemastore').json.schemas(),
+            validate = { enable = true },
+          },
+        },
+        yamlls = {
+          yaml = {
+            schemaStore = {
+              -- You must disable built-in schemaStore support if you want to use
+              -- this plugin and its advanced options like `ignore`.
+              enable = false,
+              -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+              url = '',
+            },
+            schemas = require('schemastore').yaml.schemas(),
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -225,11 +245,14 @@ return {
       library = {
         -- Load luvit types when the `vim.uv` word is found
         { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+        { path = 'wezterm-types', modes = { 'wezterm' } },
       },
     },
   },
   -- Provides meta type definitions for Luvit docs
   { 'Bilal2453/luvit-meta', lazy = true },
+  -- Type definitions for wezterm
+  { 'justinsgithub/wezterm-types', lazy = true },
 
   { -- Autoformat
     'stevearc/conform.nvim',
@@ -270,4 +293,6 @@ return {
       },
     },
   },
+  -- Schema support for JSON/YAML
+  { 'b0o/schemastore.nvim' },
 }

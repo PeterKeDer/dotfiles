@@ -76,7 +76,7 @@ return {
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
 
       -- Enables picker for recent files
-      { 'smartpde/telescope-recent-files', config = {} },
+      { 'smartpde/telescope-recent-files', opts = {} },
     },
     config = function()
       require('telescope').setup({

@@ -1,6 +1,5 @@
-require('helpers')
-
-local wezterm = require('wezterm')
+local h = require('helpers')
+local wezterm = require('wezterm') --[[@as Wezterm]]
 local mux = wezterm.mux
 
 local config = wezterm.config_builder()
@@ -37,7 +36,7 @@ local function map_vim(key, vim_key)
     key = key.key,
     mods = key.mods,
     action = wezterm.action_callback(function(win, pane)
-      local key_to_send = IsNvim(pane) and vim_key or key
+      local key_to_send = h.is_nvim(pane) and vim_key or key
       win:perform_action({ SendKey = key_to_send }, pane)
     end),
   }
@@ -63,7 +62,7 @@ config.keys = {
   {
     key = '!',
     mods = 'LEADER | SHIFT',
-    action = wezterm.action_callback(function(win, pane)
+    action = wezterm.action_callback(function(_, pane)
       pane:move_to_new_window()
     end),
   },
@@ -96,7 +95,7 @@ config.keys = {
   },
   {
     key = 'Backspace',
-    mods = 'OPT',
+    mods = h.select_by_os({ darwin = 'OPT', default = 'CTRL' }),
     -- Sends \x1b (escape) + \x08 (backspace) to delete one word
     -- NOTE: this seems to work better than CTRL-w in certain contexts
     -- e.g. ipython
@@ -107,19 +106,13 @@ config.keys = {
   map_vim({ key = ']', mods = 'CMD' }, { key = 'i', mods = 'CTRL' }),
 }
 
-local function merge_config(new)
-  for k, v in pairs(new) do
-    if not config[k] or type(v) ~= 'table' or type(config[k]) ~= 'table' then
-      config[k] = v
-    else
-      for _, v2 in pairs(v) do
-        table.insert(config[k], v2)
-      end
-    end
-  end
-end
-
 local smart_splits = require('smart-splits')
-merge_config(smart_splits)
+config = h.smart_merge(config, smart_splits)
+
+-- Include device-local custom settings
+local has_custom, custom = pcall(require, 'custom')
+if has_custom then
+  config = h.smart_merge(config, custom)
+end
 
 return config
