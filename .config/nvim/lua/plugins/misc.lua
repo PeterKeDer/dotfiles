@@ -303,7 +303,7 @@ return {
             ['<Left>'] = select_prev,
             ['l'] = select_next,
             ['<Right>'] = select_next,
-            ['<cr>'] = function()
+            ['<S-CR>'] = function()
               -- This just selects the item, without expanding
               local menu = utils.menu.get_current()
               if not menu then

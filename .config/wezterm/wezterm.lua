@@ -131,6 +131,18 @@ config.keys = {
   -- Map navigating forward/backward in vim
   map_vim({ key = '[', mods = 'CMD' }, { key = 'o', mods = 'CTRL' }),
   map_vim({ key = ']', mods = 'CMD' }, { key = 'i', mods = 'CTRL' }),
+  -- Allow shift/ctrl enter in vim
+  -- Source: https://stackoverflow.com/questions/16359878/how-to-map-shift-enter
+  {
+    key = 'Enter',
+    mods = 'SHIFT',
+    action = wezterm.action({ SendString = '\x1b[13;2u' }),
+  },
+  {
+    key = 'Enter',
+    mods = 'CTRL',
+    action = wezterm.action({ SendString = '\x1b[13;5u' }),
+  },
 }
 
 local smart_splits = require('smart-splits')
