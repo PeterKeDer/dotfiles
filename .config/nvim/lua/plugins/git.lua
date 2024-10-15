@@ -147,9 +147,11 @@ return {
     version = '*',
     opts = {
       default_mappings = {
-        ours = '<leader>hco',
-        theirs = '<leader>hct',
-        both = '<leader>hcb',
+        -- Consistent mappings with diffview
+        ours = '<leader>co',
+        theirs = '<leader>ct',
+        none = '<leader>cb',
+        both = '<leader>ca',
       },
     },
   },

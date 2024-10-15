@@ -53,6 +53,12 @@ return {
             '[G]oto [I]mplementation'
           )
 
+          map(
+            'gy',
+            require('telescope.builtin').lsp_type_definitions,
+            '[G]oto Type Definition'
+          )
+
           -- Jump to the type of the word under your cursor.
           map(
             '<leader>D',
@@ -288,7 +294,15 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        python = { 'isort', 'black' },
+        python = function(bufnr)
+          if
+            require('conform').get_formatter_info('ruff_format', bufnr).available
+          then
+            return { 'ruff_format' }
+          else
+            return { 'isort', 'black' }
+          end
+        end,
         bzl = { 'buildifier' },
       },
     },

@@ -9,7 +9,7 @@ config.leader = { key = 'a', mods = 'CTRL' }
 config.initial_rows = 40
 config.initial_cols = 150
 
-config.color_scheme = 'tokyonight'
+config.color_scheme = 'tokyonight_moon'
 config.font = wezterm.font('JetBrains Mono')
 config.font_size = 15
 
@@ -60,10 +60,37 @@ config.keys = {
     action = wezterm.action.CloseCurrentPane({ confirm = true }),
   },
   {
-    key = '!',
-    mods = 'LEADER | SHIFT',
+    key = 'h',
+    mods = 'CTRL | SHIFT',
+    action = wezterm.action.ActivateTabRelative(-1),
+  },
+  {
+    key = 'LeftArrow',
+    mods = 'CTRL | SHIFT',
+    action = wezterm.action.ActivateTabRelative(-1),
+  },
+  {
+    key = 'l',
+    mods = 'CTRL | SHIFT',
+    action = wezterm.action.ActivateTabRelative(1),
+  },
+  {
+    key = 'RightArrow',
+    mods = 'CTRL | SHIFT',
+    action = wezterm.action.ActivateTabRelative(1),
+  },
+  {
+    key = 'n',
+    mods = 'LEADER',
     action = wezterm.action_callback(function(_, pane)
       pane:move_to_new_window()
+    end),
+  },
+  {
+    key = 't',
+    mods = 'LEADER',
+    action = wezterm.action_callback(function(_, pane)
+      pane:move_to_new_tab()
     end),
   },
   -- Arrow navigations
