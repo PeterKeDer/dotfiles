@@ -14,20 +14,15 @@ return {
     opts = {
       options = {
         component_separators = '',
-        -- section_separators = '',
       },
       sections = {
         lualine_a = {
-          {
-            'mode',
-            color = { gui = 'bold' },
-          },
+          { 'mode' },
         },
         lualine_b = { 'diff', 'diagnostics' },
         lualine_c = {
           {
             'filename',
-            file_status = true, -- displays file status (readonly status, modified status)
             path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
           },
         },
@@ -40,6 +35,18 @@ return {
             path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
           },
         },
+      },
+      tabline = {
+        lualine_a = {
+          {
+            'tabs',
+            mode = 2, -- tab number and file name
+            path = 0, -- only show filename
+            symbols = { modified = ' ●' },
+          },
+        },
+        lualine_x = { 'datetime' },
+        lualine_y = { 'branch' },
       },
     },
   },
@@ -214,6 +221,10 @@ return {
         gitsigns = true,
         search = true,
       },
+      excluded_buftypes = {
+        'terminal',
+        'nofile',
+      },
     },
   },
   {
@@ -221,5 +232,116 @@ return {
     opts = {
       nearest_only = true,
     },
+  },
+  -- Breadcrumbs at the top of window
+  {
+    'Bekaboo/dropbar.nvim',
+    dependencies = {
+      'nvim-telescope/telescope-fzf-native.nvim',
+    },
+    config = function()
+      local api = require('dropbar.api')
+      local utils = require('dropbar.utils')
+
+      local function select_prev()
+        local menu = utils.menu.get_current()
+        if not menu then
+          return
+        end
+        if menu.prev_menu then
+          -- There is a previous dropdown, just close current one
+          menu:close()
+        else
+          -- If this menu if the first, then prev_win is the window on
+          -- which the dropbar is attached
+          local bar = utils.bar.get({ win = menu.prev_win })
+          if not bar then
+            return
+          end
+
+          -- Dropbar very unfortunately does not provide us with menu index
+          for _, component in ipairs(bar.components) do
+            -- Find the first opened menu (i.e. current menu), close it,
+            -- and open the previous one
+            if component.menu then
+              component.menu:close()
+              if component.bar_idx > 1 then
+                bar:pick(component.bar_idx - 1)
+              end
+              break
+            end
+          end
+        end
+      end
+
+      local function select_next()
+        -- Try to expand next menu if possible, otherwise enter
+        local menu = utils.menu.get_current()
+        if not menu then
+          return
+        end
+        local cursor = vim.api.nvim_win_get_cursor(menu.win)
+        local component = menu.entries[cursor[1]]:first_clickable()
+        if component then
+          menu:click_on(component, nil, 1, 'l')
+        end
+      end
+
+      require('dropbar').setup({
+        menu = {
+          quick_navigation = false,
+          keymaps = {
+            ['<Esc>'] = function()
+              -- Close all previously opened menus
+              local menu = utils.menu.get_current()
+              while menu do
+                menu:close()
+                menu = menu.prev_menu
+              end
+            end,
+            ['h'] = select_prev,
+            ['<Left>'] = select_prev,
+            ['l'] = select_next,
+            ['<Right>'] = select_next,
+            ['<cr>'] = function()
+              -- This just selects the item, without expanding
+              local menu = utils.menu.get_current()
+              if not menu then
+                return
+              end
+              local cursor = vim.api.nvim_win_get_cursor(menu.win)
+
+              -- If there are two clickables, the first one will expand
+              local first_component, pos =
+                menu.entries[cursor[1]]:first_clickable()
+              local next_component =
+                menu.entries[cursor[1]]:next_clickable(pos['end'])
+              local component = next_component or first_component
+
+              if component then
+                menu:click_on(component, nil, 1, 'l')
+              end
+            end,
+            ['/'] = function()
+              local menu = utils.menu.get_current()
+              if not menu then
+                return
+              end
+              menu:fuzzy_find_open()
+            end,
+          },
+        },
+      })
+
+      -- Override ugly highlights
+      vim.api.nvim_set_hl(0, 'DropBarMenuHoverEntry', { link = 'CursorLine' })
+      vim.api.nvim_set_hl(0, 'DropBarMenuHoverIcon', { link = 'CursorLine' })
+      vim.api.nvim_set_hl(0, 'DropBarCurrentContext', {})
+      vim.api.nvim_set_hl(0, 'DropBarPreview', { link = 'CursorLine' })
+
+      vim.keymap.set('n', '<leader>b', function()
+        api.pick()
+      end, { desc = '[B]readcrumbs' })
+    end,
   },
 }
