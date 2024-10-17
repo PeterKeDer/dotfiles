@@ -63,11 +63,6 @@ return {
           end,
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
-
-        -- For an understanding of why these mappings were
-        -- chosen, you will need to read `:help ins-completion`
-        --
-        -- No, but seriously. Please read `:help ins-completion`, it is really good!
         mapping = cmp.mapping.preset.insert({
           -- TODO: lmao there's 3 bindings of the same action
           -- Select the [n]ext item
@@ -90,6 +85,13 @@ return {
           ['<C-Right>'] = select_or_jump_next,
           ['<C-h>'] = select_or_jump_prev,
           ['<C-Left>'] = select_or_jump_prev,
+
+          -- This key is used to trigger copilot, close so it doesn't interfere
+          -- We also need to trigger fallback regardless
+          ['<C-/>'] = function(fallback)
+            cmp.close()
+            fallback()
+          end,
         }),
         sources = {
           {
@@ -105,6 +107,20 @@ return {
 
       -- Load custom snipmate snippets in the snippets directory
       require('luasnip.loaders.from_snipmate').lazy_load() -- { paths = './snippets' }
+    end,
+  },
+  {
+    'github/copilot.vim',
+    init = function()
+      -- Disable copilot by default, only show on the keybind
+      vim.g.copilot_enabled = false
+      vim.keymap.set('i', '<C-/>', '<Plug>(copilot-suggest)')
+
+      -- Ctrl h/l or left/right to cycle suggestions
+      vim.keymap.set('i', '<C-h>', '<Plug>(copilot-prev)')
+      vim.keymap.set('i', '<C-l>', '<Plug>(copilot-next)')
+      vim.keymap.set('i', '<C-Left>', '<Plug>(copilot-prev)')
+      vim.keymap.set('i', '<C-Right>', '<Plug>(copilot-next)')
     end,
   },
 }

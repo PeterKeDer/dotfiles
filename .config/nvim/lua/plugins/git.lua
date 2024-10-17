@@ -42,7 +42,9 @@ return {
       { '<leader>gb', '<cmd>BlameToggle<cr>', desc = 'Toggle Blame' },
     },
     config = function()
-      require('blame').setup()
+      require('blame').setup({
+        date_format = '%Y/%m/%d',
+      })
     end,
   },
   -- Show and modify git hunks in editor

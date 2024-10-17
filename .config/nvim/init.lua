@@ -115,6 +115,12 @@ vim.keymap.set({ 'n', 'v' }, 'gh', '^', { desc = 'Go to start of line' })
 vim.keymap.set({ 'n', 'v' }, 'g<Right>', '$', { desc = 'Go to end of line' })
 vim.keymap.set({ 'n', 'v' }, 'gl', '$', { desc = 'Go to end of line' })
 
+-- Map H/J/arrow keys to navigate between wrapped lines
+vim.keymap.set({ 'n', 'x' }, 'j', 'gj', { noremap = true })
+vim.keymap.set({ 'n', 'x' }, 'k', 'gk', { noremap = true })
+vim.keymap.set({ 'n', 'x' }, '<Down>', 'gj')
+vim.keymap.set({ 'n', 'x' }, '<Up>', 'gk')
+
 -- Copy current file path to clipboard
 vim.keymap.set('n', '<leader>cp', function()
   vim.fn.setreg('*', vim.fn.expand('%'))

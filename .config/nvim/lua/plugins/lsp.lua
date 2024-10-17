@@ -203,6 +203,25 @@ return {
             schemas = require('schemastore').yaml.schemas(),
           },
         },
+        -- Ruby setup
+        solargraph = {
+          cmd = { 'bundle', 'exec', 'solargraph', 'stdio' },
+          settings = {
+            solargraph = {
+              autoformat = true,
+              completion = true,
+              diagnostics = true,
+              folding = true,
+              references = true,
+              rename = true,
+              symbols = true,
+            },
+          },
+        },
+        -- TODO: this is annoying in files without typed: true. Find a way to disable
+        -- sorbet = {
+        --   cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
+        -- },
       }
 
       -- Ensure the servers and tools above are installed

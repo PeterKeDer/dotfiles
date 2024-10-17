@@ -35,7 +35,7 @@ return {
           init_selection = '<cr>',
           node_incremental = '<cr>',
           scope_incremental = '<C-cr>',
-          node_decremental = '<Backspace>',
+          node_decremental = '<S-cr>',
         },
       },
       textobjects = {
@@ -101,6 +101,14 @@ return {
         },
       },
     },
+    init = function()
+      -- Set keymap in normal/visual mode for shift enter for incremental selection
+      vim.keymap.set(
+        { 'n', 'x' },
+        '<S-CR>',
+        require('nvim-treesitter.incremental_selection').init_selection
+      )
+    end,
   },
   -- Show context on top of object/functions/class
   {
