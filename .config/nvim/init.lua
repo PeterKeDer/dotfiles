@@ -126,6 +126,9 @@ vim.keymap.set('n', '<leader>cp', function()
   vim.fn.setreg('*', vim.fn.expand('%'))
 end, { desc = 'Copy Path' })
 
+-- Search selected text with leader /
+vim.keymap.set('v', '/', '"0y/<C-r>0<cr>', { desc = 'Search selected text' })
+
 -- Highlight when yanking text
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -154,17 +157,6 @@ end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  {
-    'folke/tokyonight.nvim',
-    -- Load this before other plugins
-    priority = 1000,
-    init = function()
-      vim.cmd.colorscheme('tokyonight-moon')
-
-      -- Remove highlight for comments (no bold/italic)
-      vim.cmd.hi('Comment gui=none')
-    end,
-  },
   { import = 'plugins' },
 }, {
   ui = {
@@ -186,6 +178,8 @@ require('lazy').setup({
     },
   },
 })
+
+vim.cmd.colorscheme('gruvbox-material')
 
 -- Disable modelines
 vim.opt.modelines = 0

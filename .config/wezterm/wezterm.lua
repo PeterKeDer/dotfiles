@@ -9,7 +9,8 @@ config.leader = { key = 'a', mods = 'CTRL' }
 config.initial_rows = 40
 config.initial_cols = 150
 
-config.color_scheme = 'tokyonight_moon'
+config.color_scheme = 'Gruvbox Material (Gogh)'
+
 config.font = wezterm.font('JetBrains Mono')
 config.font_size = 15
 
@@ -143,15 +144,24 @@ config.keys = {
     mods = 'CTRL',
     action = wezterm.action({ SendString = '\x1b[13;5u' }),
   },
+  {
+    key = '/',
+    mods = 'CTRL',
+    action = wezterm.action.SendKey({ key = '/', mods = 'CTRL' }),
+  },
 }
 
-local smart_splits = require('smart-splits')
-config = h.smart_merge(config, smart_splits)
+local modules = {
+  'smart-splits',
+  'colors',
+  'custom',
+}
 
--- Include device-local custom settings
-local has_custom, custom = pcall(require, 'custom')
-if has_custom then
-  config = h.smart_merge(config, custom)
+for _, name in ipairs(modules) do
+  local has_mod, mod = pcall(require, name)
+  if has_mod then
+    config = h.smart_merge(config, mod)
+  end
 end
 
 return config

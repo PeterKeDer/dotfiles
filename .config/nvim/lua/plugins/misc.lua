@@ -240,6 +240,7 @@ return {
   -- Breadcrumbs at the top of window
   {
     'Bekaboo/dropbar.nvim',
+    enabled = false,
     dependencies = {
       'nvim-telescope/telescope-fzf-native.nvim',
     },
