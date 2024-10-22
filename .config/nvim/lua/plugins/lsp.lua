@@ -222,6 +222,7 @@ return {
         -- sorbet = {
         --   cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
         -- },
+        terraformls = {},
       }
 
       -- Ensure the servers and tools above are installed

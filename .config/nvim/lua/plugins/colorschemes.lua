@@ -60,8 +60,13 @@ return {
       vim.api.nvim_create_autocmd('ColorScheme', {
         callback = function()
           if vim.g.colors_name == 'gruvbox-material' then
-            -- Override cmp menu select highlight for gruvbox-material
-            vim.cmd.hi('PmenuSel guifg=none guibg=#32302f')
+            -- Override completion/floating windows colors
+            vim.cmd.hi('Pmenu guifg=#ddc7a1 guibg=#32302f')
+            vim.cmd.hi('PmenuSel guifg=none guibg=#45403d')
+            vim.cmd.hi('NormalFloat guifg=#ddc7a1 guibg=#32302f')
+
+            -- Update telescope selection colors
+            vim.cmd.hi('TelescopeSelection guifg=none guibg=#45403d')
           end
         end,
       })

@@ -16,6 +16,7 @@ return {
         'python',
         'query',
         'ruby',
+        'terraform',
         'vim',
         'vimdoc',
       },
@@ -47,7 +48,6 @@ return {
             [']c'] = '@class.outer',
             [']a'] = '@parameter.inner',
             [']s'] = '@statement.outer',
-            [']b'] = '@block.inner',
             [']l'] = '@loop.outer',
           },
           goto_next_end = {
@@ -55,7 +55,6 @@ return {
             [']C'] = '@class.outer',
             [']A'] = '@parameter.inner',
             [']S'] = '@statement.outer',
-            [']B'] = '@block.inner',
             ['[l'] = '@loop.outer',
           },
           goto_previous_start = {
@@ -63,7 +62,6 @@ return {
             ['[c'] = '@class.outer',
             ['[a'] = '@parameter.inner',
             ['[s'] = '@statement.outer',
-            ['[b'] = '@block.inner',
             [']L'] = '@loop.outer',
           },
           goto_previous_end = {
@@ -71,7 +69,6 @@ return {
             ['[C'] = '@class.outer',
             ['[A'] = '@parameter.inner',
             ['[S'] = '@statement.outer',
-            ['[B'] = '@block.inner',
             ['[L'] = '@loop.outer',
           },
         },
@@ -89,8 +86,6 @@ return {
               desc = 'Select inner part of a class region',
             },
             ['as'] = '@statement.outer',
-            ['ib'] = '@block.inner',
-            ['ab'] = '@block.outer',
             ['al'] = '@loop.outer',
           },
           selection_modes = {

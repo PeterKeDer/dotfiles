@@ -32,18 +32,12 @@ return {
 
       local lspkind = require('lspkind')
 
-      local select_or_jump_next = cmp.mapping(function()
-        if cmp.select_next_item() then
-          return
-        end
+      local jump_next = cmp.mapping(function()
         if luasnip.locally_jumpable(1) then
           luasnip.jump(1)
         end
       end, { 'i', 's' })
-      local select_or_jump_prev = cmp.mapping(function()
-        if cmp.select_prev_item() then
-          return
-        end
+      local jump_prev = cmp.mapping(function()
         if luasnip.locally_jumpable(-1) then
           luasnip.jump(-1)
         end
@@ -66,9 +60,9 @@ return {
         mapping = cmp.mapping.preset.insert({
           -- TODO: lmao there's 3 bindings of the same action
           -- Select the [n]ext item
-          ['<C-n>'] = select_or_jump_next,
+          ['<C-n>'] = cmp.mapping.select_next_item(),
           -- Select the [p]revious item
-          ['<C-p>'] = select_or_jump_prev,
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
 
           -- Scroll the documentation window [b]ack / [f]orward
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -81,10 +75,10 @@ return {
           -- Manually trigger a completion from nvim-cmp
           ['<C-Space>'] = cmp.mapping.complete({}),
 
-          ['<C-l>'] = select_or_jump_next,
-          ['<C-Right>'] = select_or_jump_next,
-          ['<C-h>'] = select_or_jump_prev,
-          ['<C-Left>'] = select_or_jump_prev,
+          ['<C-l>'] = jump_next,
+          ['<C-Right>'] = jump_next,
+          ['<C-h>'] = jump_prev,
+          ['<C-Left>'] = jump_prev,
 
           -- This key is used to trigger copilot, close so it doesn't interfere
           -- We also need to trigger fallback regardless
