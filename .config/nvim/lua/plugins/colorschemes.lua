@@ -48,10 +48,10 @@ return {
     'sainnhe/gruvbox-material',
     lazy = false,
     config = function()
-      vim.g.gruvbox_material_disable_italic_comment = 1
-
       vim.g.gruvbox_material_background = 'medium'
       vim.g.gruvbox_material_foreground = 'material'
+
+      -- vim.g.gruvbox_material_disable_italic_comment = 1
 
       -- Highlight and show colors for diagnostics
       vim.g.gruvbox_material_diagnostic_line_highlight = 1
@@ -60,13 +60,52 @@ return {
       vim.api.nvim_create_autocmd('ColorScheme', {
         callback = function()
           if vim.g.colors_name == 'gruvbox-material' then
-            -- Override completion/floating windows colors
-            vim.cmd.hi('Pmenu guifg=#ddc7a1 guibg=#32302f')
-            vim.cmd.hi('PmenuSel guifg=none guibg=#45403d')
-            vim.cmd.hi('NormalFloat guifg=#ddc7a1 guibg=#32302f')
+            -- Gets configuration and palette from gruvbox material
+            local configuration = vim.fn['gruvbox_material#get_configuration']()
+            local palette = vim.fn['gruvbox_material#get_palette'](
+              configuration.background,
+              configuration.foreground,
+              configuration.colors_override
+            )
 
-            -- Update telescope selection colors
-            vim.cmd.hi('TelescopeSelection guifg=none guibg=#45403d')
+            -- NOTE: the index 1 extracts the GUI color instead of term color
+            local window_hl = { fg = palette.fg1[1], bg = palette.bg1[1] }
+            local select_hl = { fg = nil, bg = palette.bg3[1] }
+
+            -- Override completion/floating windows colors
+            vim.api.nvim_set_hl(0, 'Pmenu', window_hl)
+            vim.api.nvim_set_hl(0, 'PmenuSel', select_hl)
+            vim.api.nvim_set_hl(0, 'NormalFloat', window_hl)
+            vim.api.nvim_set_hl(0, 'TelescopeSelection', select_hl)
+          end
+        end,
+      })
+    end,
+  },
+  {
+    'sainnhe/everforest',
+    lazy = false,
+    config = function()
+      vim.g.everforest_background = 'hard'
+
+      -- vim.g.everforest_disable_italic_comment = 1
+
+      -- Highlight and show colors for diagnostics
+      vim.g.everforest_diagnostic_line_highlight = 1
+      vim.g.everforest_diagnostic_virtual_text = 'highlighted'
+
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        callback = function()
+          if vim.g.colors_name == 'everforest' then
+            local configuration = vim.fn['everforest#get_configuration']()
+            local palette = vim.fn['everforest#get_palette'](
+              configuration.background,
+              configuration.colors_override
+            )
+
+            local select_highlight = { fg = nil, bg = palette.bg4[1] }
+            vim.api.nvim_set_hl(0, 'PmenuSel', select_highlight)
+            vim.api.nvim_set_hl(0, 'TelescopeSelection', select_highlight)
           end
         end,
       })

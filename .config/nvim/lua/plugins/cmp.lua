@@ -70,7 +70,7 @@ return {
 
           -- Accept the completion
           ['<Tab>'] = cmp.mapping.confirm({ select = true }),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          -- ['<CR>'] = cmp.mapping.confirm({ select = true }),
 
           -- Manually trigger a completion from nvim-cmp
           ['<C-Space>'] = cmp.mapping.complete({}),

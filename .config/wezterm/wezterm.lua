@@ -61,6 +61,11 @@ config.keys = {
     action = wezterm.action.CloseCurrentPane({ confirm = true }),
   },
   {
+    key = 'd',
+    mods = 'LEADER',
+    action = wezterm.action.DetachDomain('CurrentPaneDomain'),
+  },
+  {
     key = 'h',
     mods = 'CTRL | SHIFT',
     action = wezterm.action.ActivateTabRelative(-1),
@@ -149,11 +154,18 @@ config.keys = {
     mods = 'CTRL',
     action = wezterm.action.SendKey({ key = '/', mods = 'CTRL' }),
   },
+  -- Debug overlay
+  {
+    key = '/',
+    mods = 'LEADER',
+    action = wezterm.action.ShowDebugOverlay,
+  },
 }
 
 local modules = {
   'smart-splits',
   'colors',
+  'workspaces',
   'custom',
 }
 

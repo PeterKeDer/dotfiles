@@ -31,6 +31,7 @@ function M.smart_merge(t1, t2)
   for k, v in pairs(t2) do
     if type(k) == 'number' then
       -- If key is a number, insert into table as a new element
+      -- TODO: this won't work if the key is meant to be discontinuous
       table.insert(result, v)
     elseif type(v) == 'table' and type(result[k]) == 'table' then
       -- If both values are tables, try to merge them recursively
