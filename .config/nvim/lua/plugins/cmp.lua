@@ -1,6 +1,7 @@
 return {
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
+    commit = 'ae644feb7b67bf1ce4260c231d1d4300b19c6f30',
     event = 'InsertEnter',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
@@ -83,6 +84,8 @@ return {
           -- This key is used to trigger copilot, close so it doesn't interfere
           -- We also need to trigger fallback regardless
           ['<C-/>'] = function(fallback)
+            -- NOTE: <C-/> will break in https://github.com/hrsh7th/nvim-cmp/pull/1935
+            -- unless if there's any future fixes. nvim-cmp is pinned for now
             cmp.close()
             fallback()
           end,
