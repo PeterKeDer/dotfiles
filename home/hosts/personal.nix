@@ -6,6 +6,10 @@
 
   configuration = {
     # To override default home modules, add more
-    modules = [ ../home.nix ];
+    modules = [
+      ../home.nix
+      # TODO: maybe depedent on sys?
+      ../systems/wsl.nix
+    ];
   };
 }

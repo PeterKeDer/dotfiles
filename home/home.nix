@@ -11,6 +11,7 @@ in
   imports = [
     ./programs/neovim.nix
     ./programs/wezterm.nix
+    ./programs/zsh
   ];
 
   home = {
