@@ -103,9 +103,19 @@ return {
               configuration.colors_override
             )
 
-            local select_highlight = { fg = nil, bg = palette.bg4[1] }
-            vim.api.nvim_set_hl(0, 'PmenuSel', select_highlight)
-            vim.api.nvim_set_hl(0, 'TelescopeSelection', select_highlight)
+            vim.api.nvim_set_hl(
+              0,
+              'Visual',
+              { fg = nil, bg = palette.bg_blue[1] }
+            )
+
+            local select_hl = { fg = nil, bg = palette.bg3[1] }
+            local window_hl = { fg = palette.fg[1], bg = palette.bg1[1] }
+
+            vim.api.nvim_set_hl(0, 'Pmenu', window_hl)
+            vim.api.nvim_set_hl(0, 'PmenuSel', select_hl)
+            vim.api.nvim_set_hl(0, 'NormalFloat', window_hl)
+            vim.api.nvim_set_hl(0, 'TelescopeSelection', select_hl)
           end
         end,
       })

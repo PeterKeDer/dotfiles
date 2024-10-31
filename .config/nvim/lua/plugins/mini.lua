@@ -4,6 +4,25 @@ return {
     config = function()
       require('mini.ai').setup({ n_lines = 500 })
 
+      vim.keymap.set({ 'n', 'x' }, 's', '<Nop>')
+
+      -- Insert surround in visual
+      local surrounds = {
+        "'",
+        '"',
+        '(',
+        ')',
+        '[',
+        ']',
+        '{',
+        '}',
+        '`',
+      }
+      for _, surround in ipairs(surrounds) do
+        -- Remap allows "complex" keymaps to trigger instead of each letter individually
+        vim.keymap.set('v', surround, 'gsa' .. surround, { remap = true })
+      end
+
       require('mini.surround').setup({
         mappings = {
           add = 'gsa', -- Add surrounding in Normal and Visual modes

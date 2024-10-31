@@ -9,7 +9,7 @@ config.leader = { key = 'a', mods = 'CTRL' }
 config.initial_rows = 40
 config.initial_cols = 150
 
-config.color_scheme = 'Gruvbox Material (Gogh)'
+config.color_scheme = 'Everforest Dark Hard (Gogh)'
 
 config.font = wezterm.font('JetBrains Mono')
 config.font_size = 15
@@ -29,6 +29,16 @@ config.scrollback_lines = 10000
 wezterm.on('gui-startup', function()
   local _, _, window = mux.spawn_window({})
   window:gui_window():maximize()
+end)
+
+wezterm.on('format-window-title', function(tab, pane, tabs)
+  local index = ''
+  if #tabs > 1 then
+    index = string.format('[%d/%d] ', tab.tab_index + 1, #tabs)
+  end
+
+  -- Show tab # and workspace name in title
+  return index .. wezterm.mux.get_active_workspace()
 end)
 
 -- Utility function to map keys only in Neovim

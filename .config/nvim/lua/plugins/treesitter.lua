@@ -76,7 +76,7 @@ return {
           enable = true,
 
           -- Automatically jump forward to textobj
-          lookahead = true,
+          lookahead = false,
           keymaps = {
             ['af'] = '@function.outer',
             ['if'] = '@function.inner',

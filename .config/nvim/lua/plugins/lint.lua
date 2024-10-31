@@ -9,6 +9,8 @@ return {
         -- NOTE: mypy gives different result than pre-commit because
         -- the pre-comit one runs in isolation, so it's not that useful
         -- python = { 'mypy' },
+        typescript = { 'eslint' },
+        typescriptreact = { 'eslint' },
       }
 
       -- Create autocommand which carries out the actual linting

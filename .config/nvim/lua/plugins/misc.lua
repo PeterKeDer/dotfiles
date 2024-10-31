@@ -113,7 +113,22 @@ return {
   },
   -- Prevent d/c/x from copying to clipboard, and add a new cut action (m)
   { 'gbprod/cutlass.nvim', opts = { cut_key = 'm', override_del = true } },
-  { 'HiPhish/rainbow-delimiters.nvim' },
+  {
+    'HiPhish/rainbow-delimiters.nvim',
+    init = function()
+      vim.g.rainbow_delimiters = {
+        highlight = {
+          -- Removed red because it looks bad
+          'RainbowDelimiterYellow',
+          'RainbowDelimiterBlue',
+          'RainbowDelimiterOrange',
+          'RainbowDelimiterGreen',
+          'RainbowDelimiterViolet',
+          'RainbowDelimiterCyan',
+        },
+      }
+    end,
+  },
   -- Improvements to search/command UI, shows LSP docs, notifications, etc.
   {
     'folke/noice.nvim',
@@ -213,6 +228,7 @@ return {
   -- Scrollbar to show diagnostics, git, and searches
   {
     'petertriho/nvim-scrollbar',
+    enabled = false,
     opts = {
       handlers = {
         cursor = false,

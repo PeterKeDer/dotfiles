@@ -314,6 +314,8 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
         python = function(bufnr)
           if
             require('conform').get_formatter_info('ruff_format', bufnr).available
@@ -324,6 +326,7 @@ return {
           end
         end,
         bzl = { 'buildifier' },
+        ruby = { 'rubocop' },
       },
     },
   },

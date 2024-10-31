@@ -129,6 +129,9 @@ end, { desc = 'Copy Path' })
 -- Search selected text with leader /
 vim.keymap.set('v', '/', '"0y/<C-r>0<cr>', { desc = 'Search selected text' })
 
+vim.keymap.set('v', '<Tab>', '>')
+vim.keymap.set('v', '<S-Tab>', '<')
+
 -- Highlight when yanking text
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -179,7 +182,7 @@ require('lazy').setup({
   },
 })
 
-vim.cmd.colorscheme('gruvbox-material')
+vim.cmd.colorscheme('everforest')
 
 -- Disable modelines
 vim.opt.modelines = 0
