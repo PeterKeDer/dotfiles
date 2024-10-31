@@ -223,6 +223,15 @@ return {
         --   cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
         -- },
         terraformls = {},
+        nil_ls = {
+          settings = {
+            ['nil'] = {
+              formatting = {
+                command = { 'nixfmt' },
+              },
+            },
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
