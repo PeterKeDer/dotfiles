@@ -40,6 +40,9 @@
     initExtra = ''
       POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
       POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders
+
+      # Silence direnv logs
+      export DIRENV_LOG_FORMAT=
     '';
   };
 }

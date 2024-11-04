@@ -1,0 +1,4 @@
+{ ... }:
+{
+  targets.darwin.enable = true;
+}

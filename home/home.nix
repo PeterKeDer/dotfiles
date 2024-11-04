@@ -9,6 +9,7 @@ let
 in
 {
   imports = [
+    ./programs/direnv.nix
     ./programs/neovim.nix
     ./programs/wezterm.nix
     ./programs/zsh

@@ -42,10 +42,21 @@
           mergedConfiguration = lib.attrsets.recursiveUpdate defaultConfiguration configuration;
         in
         home-manager.lib.homeManagerConfiguration mergedConfiguration;
+
+      hosts = map import [
+        ./hosts/personal.nix
+        ./hosts/work.nix
+      ];
+
+      # Create home configuration for each host indexed by username
+      homeConfigurations = builtins.listToAttrs (
+        (map (host: {
+          name = host.username;
+          value = mkHomeConfiguration host;
+        }) hosts)
+      );
     in
     {
-      homeConfigurations = {
-        peterkeder = mkHomeConfiguration (import ./hosts/personal.nix);
-      };
+      homeConfigurations = homeConfigurations;
     };
 }
