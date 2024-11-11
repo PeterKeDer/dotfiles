@@ -8,6 +8,7 @@ return {
     opts = {
       options = {
         component_separators = '',
+        section_separators = '',
       },
       sections = {
         lualine_a = { 'mode' },
@@ -15,6 +16,7 @@ return {
         lualine_c = {
           {
             'filename',
+            symbols = { modified = '●' },
             path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
           },
         },
@@ -24,6 +26,7 @@ return {
           {
             'filename',
             file_status = true, -- displays file status (readonly status, modified status)
+            symbols = { modified = '●' },
             path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
           },
         },
@@ -34,7 +37,7 @@ return {
             'tabs',
             mode = 2, -- tab number and file name
             path = 0, -- only show filename
-            symbols = { modified = ' ●' },
+            show_modified_status = false,
           },
         },
         lualine_x = { 'datetime' },

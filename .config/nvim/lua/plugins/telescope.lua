@@ -5,11 +5,9 @@ local function get_selected_text()
   local _, erow, ecol = unpack(vim.fn.getpos('.'))
   if vim.fn.mode() == 'v' and srow == erow then
     if scol <= ecol then
-      lines =
-        vim.api.nvim_buf_get_text(0, srow - 1, scol - 1, erow - 1, ecol, {})
+      lines = vim.api.nvim_buf_get_text(0, srow - 1, scol - 1, erow - 1, ecol, {})
     else
-      lines =
-        vim.api.nvim_buf_get_text(0, erow - 1, ecol - 1, srow - 1, scol, {})
+      lines = vim.api.nvim_buf_get_text(0, erow - 1, ecol - 1, srow - 1, scol, {})
     end
   end
 
@@ -50,6 +48,8 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(ctx)
     vim.api.nvim_buf_call(ctx.buf, function()
       vim.fn.matchadd('TelescopeParent', '\t\t.*\t\t')
+      -- Match truncated paths
+      vim.fn.matchadd('TelescopeParent', '\t\t.*…')
       vim.api.nvim_set_hl(0, 'TelescopeParent', { link = 'Comment' })
     end)
   end,
@@ -82,6 +82,9 @@ return {
       require('telescope').setup({
         defaults = {
           file_ignore_patterns = { 'node_modules/', '.git/' },
+          -- TODO: use this option after merged to stable (0.1.x)
+          -- https://github.com/nvim-telescope/telescope.nvim/pull/3010
+          -- It currently still has problems with highlighting lsp symbols
           path_display = file_name_first,
           -- More horizontal space for long file paths
           layout_strategy = 'vertical',
@@ -102,18 +105,8 @@ return {
       local actions_state = require('telescope.actions.state')
       local actions = require('telescope.actions')
 
-      vim.keymap.set(
-        'n',
-        '<leader>fh',
-        builtin.help_tags,
-        { desc = '[F]ind [H]elp' }
-      )
-      vim.keymap.set(
-        'n',
-        '<leader>fk',
-        builtin.keymaps,
-        { desc = '[F]ind [K]eymaps' }
-      )
+      vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = '[F]ind [H]elp' })
+      vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = '[F]ind [K]eymaps' })
 
       vim.keymap.set('n', '<leader>ff', function()
         builtin.find_files({ hidden = true })
@@ -133,19 +126,15 @@ return {
         })
       end, { desc = '[F]ind [A]ll by [G]rep' })
 
-      vim.keymap.set(
-        'n',
-        '<leader>fs',
-        builtin.lsp_workspace_symbols,
-        { desc = '[F]ind Workspace [S]ymbols' }
-      )
+      vim.keymap.set('n', '<leader>fs', function()
+        builtin.lsp_dynamic_workspace_symbols({ fname_width = 0.4, symbol_width = 0.4 })
+      end, { desc = '[F]ind Workspace [S]ymbols' })
+      vim.keymap.set('n', '<leader>fd', function()
+        builtin.lsp_document_symbols({ symbol_width = 0.5 })
+      end, { desc = '[F]ind [D]ocument Symbols' })
 
-      vim.keymap.set(
-        'n',
-        '<leader>fw',
-        builtin.grep_string,
-        { desc = '[F]ind current [W]ord' }
-      )
+      vim.keymap.set('n', '<leader>fx', builtin.diagnostics, { desc = '[F]ind Diagnostics' })
+      vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = '[F]ind current [W]ord' })
       vim.keymap.set({ 'n', 'v' }, '<leader>fg', function()
         builtin.live_grep({
           default_text = get_selected_text(),
@@ -156,18 +145,7 @@ return {
         })
       end, { desc = '[F]ind by [G]rep' })
 
-      vim.keymap.set(
-        'n',
-        '<leader>fd',
-        builtin.diagnostics,
-        { desc = '[F]ind [D]iagnostics' }
-      )
-      vim.keymap.set(
-        'n',
-        '<leader>fr',
-        builtin.resume,
-        { desc = '[F]ind [R]esume' }
-      )
+      vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = '[F]ind [R]esume' })
       vim.keymap.set('n', '<leader><leader>', function()
         require('telescope').extensions.recent_files.pick({
           only_cwd = true,
@@ -175,12 +153,10 @@ return {
       end, { desc = '[ ] Find recent files' })
 
       vim.keymap.set('n', '<leader>/', function()
-        builtin.current_buffer_fuzzy_find(
-          require('telescope.themes').get_dropdown({
-            winblend = 10,
-            previewer = false,
-          })
-        )
+        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown({
+          winblend = 10,
+          previewer = false,
+        }))
       end, { desc = '[/] Fuzzily search in current buffer' })
 
       vim.keymap.set('n', '<leader>f/', function()
@@ -201,29 +177,27 @@ return {
 
         if selected.value then
           -- Open commit using diffview
-          vim.cmd(
-            ':DiffviewOpen ' .. selected.value .. '~1..' .. selected.value
-          )
+          vim.cmd(':DiffviewOpen ' .. selected.value .. '~1..' .. selected.value)
         end
       end
 
-      vim.keymap.set('n', '<leader>fgc', function()
+      vim.keymap.set('n', '<leader>fc', function()
         builtin.git_commits({
           attach_mappings = function(_, map)
             map({ 'n', 'i' }, '<cr>', open_commit)
             return true
           end,
         })
-      end, { desc = '[F]ind [G]it [C]ommits' })
+      end, { desc = '[F]ind Git [C]ommits' })
 
-      vim.keymap.set('n', '<leader>fgb', function()
+      vim.keymap.set('n', '<leader>fbc', function()
         builtin.git_bcommits({
           attach_mappings = function(_, map)
             map({ 'n', 'i' }, '<cr>', open_commit)
             return true
           end,
         })
-      end, { desc = '[F]ind [G]it [B]uffer Commits' })
+      end, { desc = '[F]ind Git [B]uffer [C]ommits' })
     end,
   },
   -- Search and replace

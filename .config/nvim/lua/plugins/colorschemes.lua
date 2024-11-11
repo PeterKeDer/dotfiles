@@ -94,11 +94,7 @@ return {
               configuration.colors_override
             )
 
-            vim.api.nvim_set_hl(
-              0,
-              'Visual',
-              { fg = nil, bg = palette.bg_blue[1] }
-            )
+            vim.api.nvim_set_hl(0, 'Visual', { fg = nil, bg = palette.bg_blue[1] })
 
             local select_hl = { fg = nil, bg = palette.bg3[1] }
             local window_hl = { fg = palette.fg[1], bg = palette.bg1[1] }

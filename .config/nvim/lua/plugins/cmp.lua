@@ -24,6 +24,7 @@ return {
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      -- VSCode icons in completion
       'onsails/lspkind.nvim',
     },
     config = function()

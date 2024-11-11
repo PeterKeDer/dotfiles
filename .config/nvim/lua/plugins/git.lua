@@ -33,7 +33,20 @@ return {
   -- Show git diffs
   {
     'sindrets/diffview.nvim',
-    opts = {},
+    config = function()
+      local close_diffview = { 'n', 'q', '<cmd>DiffviewClose<cr>', { desc = 'Close Diffview' } }
+      local close_window = { 'n', 'q', '<cmd>q<cr>', { desc = 'Close Window' } }
+
+      require('diffview').setup({
+        keymaps = {
+          view = { close_diffview },
+          file_panel = { close_diffview },
+          file_history_panel = { close_diffview },
+          option_panel = { close_window },
+          help_panel = { close_window },
+        },
+      })
+    end,
     keys = {
       { '<leader>gd', '<cmd>DiffviewOpen<cr>', desc = '[G]it [D]iff' },
       {
