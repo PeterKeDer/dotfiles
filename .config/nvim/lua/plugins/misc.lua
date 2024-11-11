@@ -10,9 +10,7 @@ return {
         component_separators = '',
       },
       sections = {
-        lualine_a = {
-          { 'mode' },
-        },
+        lualine_a = { 'mode' },
         lualine_b = { 'diff', 'diagnostics' },
         lualine_c = {
           {
@@ -52,11 +50,7 @@ return {
       vim.keymap.set('n', '<C-Left>', require('smart-splits').move_cursor_left)
       vim.keymap.set('n', '<C-Down>', require('smart-splits').move_cursor_down)
       vim.keymap.set('n', '<C-Up>', require('smart-splits').move_cursor_up)
-      vim.keymap.set(
-        'n',
-        '<C-Right>',
-        require('smart-splits').move_cursor_right
-      )
+      vim.keymap.set('n', '<C-Right>', require('smart-splits').move_cursor_right)
       vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
       vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
       vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
@@ -222,22 +216,6 @@ return {
             ['\\'] = 'close_window',
           },
         },
-      },
-    },
-  },
-  -- Scrollbar to show diagnostics, git, and searches
-  {
-    'petertriho/nvim-scrollbar',
-    enabled = false,
-    opts = {
-      handlers = {
-        cursor = false,
-        gitsigns = true,
-        search = true,
-      },
-      excluded_buftypes = {
-        'terminal',
-        'nofile',
       },
     },
   },

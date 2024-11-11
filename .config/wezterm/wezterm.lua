@@ -9,10 +9,10 @@ config.leader = { key = 'a', mods = 'CTRL' }
 config.initial_rows = 40
 config.initial_cols = 150
 
-config.color_scheme = 'Everforest Dark Hard (Gogh)'
+config.color_scheme = 'Gruvbox Material (Gogh)'
 
 config.font = wezterm.font('JetBrains Mono')
-config.font_size = 15
+config.font_size = 14
 
 -- Potential options for better looking font
 -- config.front_end = 'OpenGL'

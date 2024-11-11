@@ -11,9 +11,17 @@ return {
     },
     config = function()
       local neogit = require('neogit')
-      neogit.setup({})
+      neogit.setup({
+        mappings = {
+          status = {
+            ['<cr>'] = 'VSplitOpen',
+          },
+        },
+      })
 
-      vim.keymap.set('n', '<leader>gg', neogit.open, { desc = 'Neogit' })
+      vim.keymap.set('n', '<leader>gg', function()
+        neogit.open({ kind = 'tab' })
+      end, { desc = 'Neogit' })
       vim.keymap.set('n', '<leader>gl', function()
         neogit.open({ 'log' })
       end, { desc = '[G]it [L]og' })
@@ -51,13 +59,6 @@ return {
   {
     'lewis6991/gitsigns.nvim',
     opts = {
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
       current_line_blame = true,
       on_attach = function(bufnr)
         local gitsigns = require('gitsigns')
@@ -75,71 +76,35 @@ return {
           gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
         end, { desc = 'reset git hunk' })
         -- normal mode
-        map(
-          'n',
-          '<leader>hs',
-          gitsigns.stage_hunk,
-          { desc = 'Git [s]tage hunk' }
-        )
-        map(
-          'n',
-          '<leader>hr',
-          gitsigns.reset_hunk,
-          { desc = 'Git [r]eset hunk' }
-        )
-        map(
-          'n',
-          '<leader>hS',
-          gitsigns.stage_buffer,
-          { desc = 'Git [S]tage buffer' }
-        )
-        map(
-          'n',
-          '<leader>hu',
-          gitsigns.undo_stage_hunk,
-          { desc = 'Git [u]ndo stage hunk' }
-        )
-        map(
-          'n',
-          '<leader>hR',
-          gitsigns.reset_buffer,
-          { desc = 'Git [R]eset buffer' }
-        )
-        map(
-          'n',
-          '<leader>hp',
-          gitsigns.preview_hunk,
-          { desc = 'Git [p]review hunk' }
-        )
-        map(
-          'n',
-          '<leader>hb',
-          gitsigns.blame_line,
-          { desc = 'Git [b]lame line' }
-        )
-        map(
-          'n',
-          '<leader>hd',
-          gitsigns.diffthis,
-          { desc = 'Git [d]iff against index' }
-        )
+        map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'Git [s]tage hunk' })
+        map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'Git [r]eset hunk' })
+        map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'Git [S]tage buffer' })
+        map('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = 'Git [u]ndo stage hunk' })
+        map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'Git [R]eset buffer' })
+        map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'Git [p]review hunk' })
+        map('n', '<leader>hb', gitsigns.blame_line, { desc = 'Git [b]lame line' })
+        map('n', '<leader>hd', gitsigns.diffthis, { desc = 'Git [d]iff against index' })
         map('n', '<leader>hD', function()
           gitsigns.diffthis('@')
         end, { desc = 'Git [D]iff against last commit' })
         -- Toggles
-        -- map(
-        --   'n',
-        --   '<leader>tb',
-        --   gitsigns.toggle_current_line_blame,
-        --   { desc = '[T]oggle git show [b]lame line' }
-        -- )
-        -- map('n', '<leader>tD', gitsigns.toggle_deleted, { desc = '[T]oggle git show [D]eleted' })
+        map('n', '<leader>td', gitsigns.toggle_deleted, { desc = '[T]oggle git show [D]eleted' })
+        map(
+          'n',
+          '<leader>hh',
+          gitsigns.toggle_linehl,
+          { desc = 'Toggle show git [H]unks [H]ighlights' }
+        )
         map('n', ']h', function()
           gitsigns.nav_hunk('next')
         end, { desc = 'Next Hunk' })
+
         map('n', '[h', function()
           gitsigns.nav_hunk('prev')
         end, { desc = 'Prev Hunk' })
+
+        -- Hunk textobject
+        map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
       end,
     },
   },

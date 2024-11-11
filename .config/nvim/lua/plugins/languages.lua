@@ -82,4 +82,26 @@ return {
       )
     end,
   },
+  {
+    'OXY2DEV/markview.nvim',
+    lazy = false,
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons',
+    },
+    opts = {
+      -- Do not show by default, use preview split command to show
+      initial_state = false,
+    },
+    config = function(_, opts)
+      require('markview').setup(opts)
+
+      vim.keymap.set(
+        'n',
+        '<leader>mp',
+        '<cmd>Markview splitToggle<cr>',
+        { desc = 'Markdown Preview' }
+      )
+    end,
+  },
 }

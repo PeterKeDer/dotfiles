@@ -5,9 +5,6 @@ return {
     lazy = false,
     opts = {
       style = 'moon',
-      styles = {
-        comments = { italic = false },
-      },
     },
   },
   {
@@ -17,8 +14,6 @@ return {
       overrides = function(colors)
         local theme = colors.theme
         return {
-          Comment = { italic = false },
-
           -- Darker completion menu
           Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },
           PmenuSel = { fg = 'none', bg = theme.ui.bg_p2 },
@@ -48,10 +43,8 @@ return {
     'sainnhe/gruvbox-material',
     lazy = false,
     config = function()
-      vim.g.gruvbox_material_background = 'medium'
+      vim.g.gruvbox_material_background = 'hard'
       vim.g.gruvbox_material_foreground = 'material'
-
-      -- vim.g.gruvbox_material_disable_italic_comment = 1
 
       -- Highlight and show colors for diagnostics
       vim.g.gruvbox_material_diagnostic_line_highlight = 1
@@ -87,8 +80,6 @@ return {
     lazy = false,
     config = function()
       vim.g.everforest_background = 'hard'
-
-      -- vim.g.everforest_disable_italic_comment = 1
 
       -- Highlight and show colors for diagnostics
       vim.g.everforest_diagnostic_line_highlight = 1

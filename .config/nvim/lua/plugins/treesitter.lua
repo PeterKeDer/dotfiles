@@ -111,7 +111,7 @@ return {
     opts = {
       -- Settings to match VSCode behavior
       max_lines = 2,
-      -- Inner scope (e.g. loops, if-else) are discareded first
+      -- Inner scope (e.g. loops, if-else) are discarded first
       trim_scope = 'inner',
     },
   },

@@ -6,6 +6,8 @@ local scheme_overrides = {
   ['Gruvbox Material (Gogh)'] = function(scheme)
     -- Brighter gray for auto-complete (set to the same color as neovim comments)
     scheme.brights[1] = '#928374'
+    -- Darker background to match Gruvbox material 'hard' background
+    scheme.background = '#1d2021'
     return scheme
   end,
 }

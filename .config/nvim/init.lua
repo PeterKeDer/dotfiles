@@ -93,12 +93,11 @@ vim.keymap.set(
 
 -- Escape terminal instead of the default <C-\><C-Esc>
 -- NOTE: This won't work in all terminal emulators/tmux/etc
-vim.keymap.set(
-  't',
-  '<Esc><Esc>',
-  '<C-\\><C-n>',
-  { desc = 'Exit terminal mode' }
-)
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- Write without autocmd (e.g. format)
+vim.cmd('cnoreabbrev nw noautocmd w')
+vim.cmd('cnoreabbrev nw! noautocmd w!')
 
 -- Navigating between tabs (buffers)
 vim.keymap.set('n', '[t', '<cmd>tabp<cr>', { desc = 'Previous Tab' })
@@ -115,7 +114,7 @@ vim.keymap.set({ 'n', 'v' }, 'gh', '^', { desc = 'Go to start of line' })
 vim.keymap.set({ 'n', 'v' }, 'g<Right>', '$', { desc = 'Go to end of line' })
 vim.keymap.set({ 'n', 'v' }, 'gl', '$', { desc = 'Go to end of line' })
 
--- Map H/J/arrow keys to navigate between wrapped lines
+-- Map J/K/arrow keys to navigate between wrapped lines
 vim.keymap.set({ 'n', 'x' }, 'j', 'gj', { noremap = true })
 vim.keymap.set({ 'n', 'x' }, 'k', 'gk', { noremap = true })
 vim.keymap.set({ 'n', 'x' }, '<Down>', 'gj')
@@ -182,7 +181,7 @@ require('lazy').setup({
   },
 })
 
-vim.cmd.colorscheme('everforest')
+vim.cmd.colorscheme('gruvbox-material')
 
 -- Disable modelines
 vim.opt.modelines = 0
