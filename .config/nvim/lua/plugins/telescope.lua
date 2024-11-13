@@ -19,28 +19,6 @@ local function get_selected_text()
   return text
 end
 
-function string.starts(String, Start)
-  return string.sub(String, 1, string.len(Start)) == Start
-end
-
-local function file_name_first(_, path)
-  local tail = vim.fs.basename(path)
-  local parent = vim.fs.dirname(path)
-  local cwd = vim.fn.getcwd()
-
-  if parent == '.' then
-    return tail
-  elseif string.starts(parent, cwd) then
-    -- Remove cwd in path if exists
-    -- e.g. if cwd = /user/project and parent = /user/project/file
-    -- format parent = file
-    parent = string.sub(parent, string.len(cwd) + 2, string.len(parent))
-  end
-
-  -- Use two tabs to delimit filename and path
-  return string.format('%s\t\t%s\t\t', tail, parent)
-end
-
 -- Colors everything after two tabs like comments
 -- Works in conjunction with function above to color the paths
 vim.api.nvim_create_autocmd('FileType', {
@@ -60,7 +38,7 @@ return {
   {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
-    branch = '0.1.x',
+    branch = 'master',
     dependencies = {
       'nvim-lua/plenary.nvim',
       {
@@ -79,13 +57,15 @@ return {
       { 'smartpde/telescope-recent-files', config = {} },
     },
     config = function()
+      local helpers = require('utils.telescope-helpers')
+
       require('telescope').setup({
         defaults = {
           file_ignore_patterns = { 'node_modules/', '.git/' },
           -- TODO: use this option after merged to stable (0.1.x)
           -- https://github.com/nvim-telescope/telescope.nvim/pull/3010
           -- It currently still has problems with highlighting lsp symbols
-          path_display = file_name_first,
+          path_display = helpers.file_name_first_path_display,
           -- More horizontal space for long file paths
           layout_strategy = 'vertical',
         },
@@ -127,10 +107,16 @@ return {
       end, { desc = '[F]ind [A]ll by [G]rep' })
 
       vim.keymap.set('n', '<leader>fs', function()
-        builtin.lsp_dynamic_workspace_symbols({ fname_width = 0.4, symbol_width = 0.4 })
+        builtin.lsp_dynamic_workspace_symbols({
+          entry_maker = helpers.lsp_symbol_entry_maker({
+            show_file = true,
+          }),
+        })
       end, { desc = '[F]ind Workspace [S]ymbols' })
       vim.keymap.set('n', '<leader>fd', function()
-        builtin.lsp_document_symbols({ symbol_width = 0.5 })
+        builtin.lsp_document_symbols({
+          entry_maker = helpers.lsp_symbol_entry_maker(),
+        })
       end, { desc = '[F]ind [D]ocument Symbols' })
 
       vim.keymap.set('n', '<leader>fx', builtin.diagnostics, { desc = '[F]ind Diagnostics' })
