@@ -21,7 +21,7 @@ config.freetype_render_target = 'HorizontalLcd'
 config.cell_width = 0.9
 config.freetype_load_flags = 'NO_HINTING'
 
-config.max_fps = 120
+config.max_fps = 240
 config.enable_scroll_bar = true
 config.scrollback_lines = 10000
 

@@ -4,6 +4,7 @@ local lspkind = require('lspkind')
 
 local entry_display = require('telescope.pickers.entry_display')
 local make_entry = require('telescope.make_entry')
+local utils = require('telescope.utils')
 
 local function concat_lists(lists)
   local result = {}
@@ -46,80 +47,98 @@ local function lsp_symbol_section(entry, opts)
     highlight = 'CmpItemKind'
   end
 
-  local components = {
-    { icon, highlight },
-    entry.symbol_name,
+  return {
+    { { icon, highlight }, { width = 2 } },
+    { entry.symbol_name, opts.symbol_width or {} },
   }
-  local items = { { width = 2 }, opts.symbol_width or {} }
-  return components, items
+end
+
+local function line_col_component(entry)
+  local line_nr = entry.lnum .. ':' .. entry.col
+  return { { line_nr, 'TelescopeResultsLineNr' }, { width = #line_nr } }
+end
+
+local function icon_component(entry)
+  local icon_display, icon_hl = utils.transform_devicons(entry.filename)
+  return { { icon_display, icon_hl }, { width = 2 } }
 end
 
 local function file_section(entry, opts)
   opts = opts or {}
 
   local path, file = get_path_and_file(entry.filename)
+
+  local components = {
+    icon_component(entry),
+    { file, opts.file_width or {} },
+    line_col_component(entry),
+  }
+
   if path then
-    -- TODO: consider line:col numbers. This requires changing everything to entry_maker
-    -- perhaps as a separate section, so can use for document symbols?
-    return { file .. ' ', { path, 'Comment' } }, { opts.file_width or {}, opts.path_width or {} }
-  else
-    return { file }, { opts.file_width or {} }
+    table.insert(components, { { path, 'Comment' }, opts.path_width or {} })
   end
+
+  return components
 end
 
-local function display_sections(entry, sections, opts)
+local function display_components(components, opts)
   opts = opts or {}
-  local section_items = {}
-  local section_components = {}
+  local items = {}
+  local contents = {}
 
-  for _, section in ipairs(sections) do
-    local section_func, section_opts
-
-    if type(section) == 'table' then
-      section_func = section[1]
-      section_opts = section.opts or section[2] or {}
-    else
-      section_func = section
-      section_opts = {}
-    end
-
-    local components, items = section_func(entry, section_opts)
-    table.insert(section_components, components)
-    table.insert(section_items, items)
+  for _, component in ipairs(components) do
+    table.insert(contents, component[1])
+    table.insert(items, component[2] or {})
   end
 
   local displayer = entry_display.create({
     separator = opts.separator or ' ',
-    items = concat_lists(section_items),
+    items = items,
   })
-  return displayer(concat_lists(section_components))
+  return displayer(contents)
 end
 
-local function make_sections_display(sections, opts)
-  return function(entry)
-    return display_sections(entry, sections, opts)
-  end
-end
-
-function M.lsp_symbol_entry_maker(opts)
-  opts = opts or {}
-
-  --- if show file, width is 0.3, else 0.5
-  local symbol_width = opts.show_file and { width = 0.3 } or { remaining = true }
-  local sections = {
-    {
-      lsp_symbol_section,
-      opts = { symbol_width = symbol_width },
-    },
-  }
-  if opts.show_file then
-    table.insert(sections, file_section)
-  end
-
+function M.lsp_symbol_workspace_entry_maker()
   local entry_maker = make_entry.gen_from_lsp_symbols({})
   return function(line)
     local originalEntryTable = entry_maker(line)
-    originalEntryTable.display = make_sections_display(sections)
+    originalEntryTable.display = function(entry)
+      local components = concat_lists({
+        lsp_symbol_section(entry, { symbol_width = { width = 0.3 } }),
+        file_section(entry),
+      })
+      return display_components(components)
+    end
+    return originalEntryTable
+  end
+end
+
+function M.lsp_symbol_entry_maker()
+  local entry_maker = make_entry.gen_from_lsp_symbols({})
+  return function(line)
+    local originalEntryTable = entry_maker(line)
+    originalEntryTable.display = function(entry)
+      local components = concat_lists({
+        lsp_symbol_section(entry),
+        { line_col_component(entry) },
+      })
+      return display_components(components)
+    end
+    return originalEntryTable
+  end
+end
+
+function M.grep_entry_maker()
+  local entry_maker = make_entry.gen_from_vimgrep({})
+  return function(line)
+    local originalEntryTable = entry_maker(line)
+    originalEntryTable.display = function(entry)
+      local components = concat_lists({
+        file_section(entry),
+        { { entry.text } },
+      })
+      return display_components(components)
+    end
     return originalEntryTable
   end
 end

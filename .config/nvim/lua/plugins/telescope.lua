@@ -1,3 +1,25 @@
+-- Copied from telescope
+local escape_chars = function(s)
+  return (
+    s:gsub('[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]', {
+      ['\\'] = '\\\\',
+      ['-'] = '\\-',
+      ['('] = '\\(',
+      [')'] = '\\)',
+      ['['] = '\\[',
+      [']'] = '\\]',
+      ['{'] = '\\{',
+      ['}'] = '\\}',
+      ['?'] = '\\?',
+      ['+'] = '\\+',
+      ['*'] = '\\*',
+      ['^'] = '\\^',
+      ['$'] = '\\$',
+      ['.'] = '\\.',
+    })
+  )
+end
+
 local function get_selected_text()
   -- NOTE: this only returns one selected line
   local lines = nil
@@ -15,8 +37,7 @@ local function get_selected_text()
     return nil
   end
 
-  local text, _ = lines[1]:gsub('([%(%)%[%]%{%}%.])', '\\%1')
-  return text
+  return escape_chars(lines[1])
 end
 
 -- Colors everything after two tabs like comments
@@ -99,20 +120,17 @@ return {
       vim.keymap.set('n', '<leader>fag', function()
         builtin.live_grep({
           default_text = get_selected_text(),
-          additional_args = function(_)
-            -- Show hidden and ignored files in live grep
-            return { '--hidden', '--no-ignore' }
-          end,
+          entry_maker = helpers.grep_entry_maker(),
+          additional_args = { '--hidden', '--no-ignore' },
         })
       end, { desc = '[F]ind [A]ll by [G]rep' })
 
       vim.keymap.set('n', '<leader>fs', function()
         builtin.lsp_dynamic_workspace_symbols({
-          entry_maker = helpers.lsp_symbol_entry_maker({
-            show_file = true,
-          }),
+          entry_maker = helpers.lsp_symbol_workspace_entry_maker(),
         })
       end, { desc = '[F]ind Workspace [S]ymbols' })
+
       vim.keymap.set('n', '<leader>fd', function()
         builtin.lsp_document_symbols({
           entry_maker = helpers.lsp_symbol_entry_maker(),
@@ -120,14 +138,19 @@ return {
       end, { desc = '[F]ind [D]ocument Symbols' })
 
       vim.keymap.set('n', '<leader>fx', builtin.diagnostics, { desc = '[F]ind Diagnostics' })
-      vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = '[F]ind current [W]ord' })
+
+      vim.keymap.set('n', '<leader>fw', function()
+        builtin.grep_string({
+          entry_maker = helpers.grep_entry_maker(),
+          additional_args = { '--hidden' },
+        })
+      end, { desc = '[F]ind current [W]ord' })
+
       vim.keymap.set({ 'n', 'v' }, '<leader>fg', function()
         builtin.live_grep({
           default_text = get_selected_text(),
-          additional_args = function(_)
-            -- Show hidden files in live grep
-            return { '--hidden' }
-          end,
+          entry_maker = helpers.grep_entry_maker(),
+          additional_args = { '--hidden' },
         })
       end, { desc = '[F]ind by [G]rep' })
 
@@ -148,6 +171,7 @@ return {
       vim.keymap.set('n', '<leader>f/', function()
         builtin.live_grep({
           grep_open_files = true,
+          entry_maker = helpers.grep_entry_maker(),
           prompt_title = 'Live Grep in Open Files',
         })
       end, { desc = '[F]ind [/] in Open Files' })
@@ -184,6 +208,15 @@ return {
           end,
         })
       end, { desc = '[F]ind Git [B]uffer [C]ommits' })
+
+      vim.keymap.set({ 'x' }, '<leader>fc', function()
+        builtin.git_bcommits_range({
+          attach_mappings = function(_, map)
+            map({ 'n', 'i' }, '<cr>', open_commit)
+            return true
+          end,
+        })
+      end, { desc = '[F]ind Git [C]ommits from selection' })
     end,
   },
   -- Search and replace
