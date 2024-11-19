@@ -6,23 +6,6 @@ return {
 
       vim.keymap.set({ 'n', 'x' }, 's', '<Nop>')
 
-      -- Insert surround in visual
-      local surrounds = {
-        "'",
-        '"',
-        '(',
-        ')',
-        '[',
-        ']',
-        '{',
-        '}',
-        '`',
-      }
-      for _, surround in ipairs(surrounds) do
-        -- Remap allows "complex" keymaps to trigger instead of each letter individually
-        vim.keymap.set('v', surround, 'gsa' .. surround, { remap = true })
-      end
-
       require('mini.surround').setup({
         mappings = {
           add = 'gsa', -- Add surrounding in Normal and Visual modes
@@ -46,18 +29,6 @@ return {
       vim.keymap.set('n', '<leader>uf', function()
         MiniFiles.open(vim.api.nvim_buf_get_name(0))
       end, { desc = 'Open Current File' })
-
-      -- local statusline = require 'mini.statusline'
-      -- -- set use_icons to true if you have a Nerd Font
-      -- statusline.setup { use_icons = vim.g.have_nerd_font }
-      --
-      -- -- You can configure sections in the statusline by overriding their
-      -- -- default behavior. For example, here we set the section for
-      -- -- cursor location to LINE:COLUMN
-      -- ---@diagnostic disable-next-line: duplicate-set-field
-      -- statusline.section_location = function()
-      --   return '%2l:%-2v'
-      -- end
 
       require('mini.comment')
     end,

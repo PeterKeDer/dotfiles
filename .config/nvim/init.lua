@@ -108,12 +108,6 @@ vim.keymap.set('n', '<leader>tc', '<cmd>tabc<cr>', { desc = 'Close Tab' })
 vim.keymap.set('n', '[q', '<cmd>cp<cr>', { desc = 'Previous Quicklist Item' })
 vim.keymap.set('n', ']q', '<cmd>cn<cr>', { desc = 'Next Quicklist Item' })
 
--- Navigate to start/end of line because I don't like $/^
-vim.keymap.set({ 'n', 'v' }, 'g<Left>', '^', { desc = 'Go to start of line' })
-vim.keymap.set({ 'n', 'v' }, 'gh', '^', { desc = 'Go to start of line' })
-vim.keymap.set({ 'n', 'v' }, 'g<Right>', '$', { desc = 'Go to end of line' })
-vim.keymap.set({ 'n', 'v' }, 'gl', '$', { desc = 'Go to end of line' })
-
 -- Map J/K/arrow keys to navigate between wrapped lines
 vim.keymap.set({ 'n', 'x' }, 'j', 'gj', { noremap = true })
 vim.keymap.set({ 'n', 'x' }, 'k', 'gk', { noremap = true })

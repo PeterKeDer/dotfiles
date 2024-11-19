@@ -11,13 +11,7 @@ return {
     },
     config = function()
       local neogit = require('neogit')
-      neogit.setup({
-        mappings = {
-          status = {
-            ['<cr>'] = 'VSplitOpen',
-          },
-        },
-      })
+      neogit.setup({})
 
       vim.keymap.set('n', '<leader>gg', function()
         neogit.open({ kind = 'tab' })
