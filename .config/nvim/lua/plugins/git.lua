@@ -115,18 +115,4 @@ return {
       end,
     },
   },
-  -- Conflict markers like vscode
-  {
-    'akinsho/git-conflict.nvim',
-    version = '*',
-    opts = {
-      default_mappings = {
-        -- Consistent mappings with diffview
-        ours = '<leader>co',
-        theirs = '<leader>ct',
-        none = '<leader>cb',
-        both = '<leader>ca',
-      },
-    },
-  },
 }

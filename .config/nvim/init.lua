@@ -94,10 +94,13 @@ vim.keymap.set(
 -- Escape terminal instead of the default <C-\><C-Esc>
 -- NOTE: This won't work in all terminal emulators/tmux/etc
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<C-`>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Write without autocmd (e.g. format)
 vim.cmd('cnoreabbrev nw noautocmd w')
 vim.cmd('cnoreabbrev nw! noautocmd w!')
+
+vim.keymap.set('i', '<C-BS>', '<C-w>')
 
 -- Navigating between tabs (buffers)
 vim.keymap.set('n', '[t', '<cmd>tabp<cr>', { desc = 'Previous Tab' })

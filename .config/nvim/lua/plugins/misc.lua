@@ -50,14 +50,14 @@ return {
     'mrjones2014/smart-splits.nvim',
     lazy = false,
     config = function()
-      vim.keymap.set('n', '<C-Left>', require('smart-splits').move_cursor_left)
-      vim.keymap.set('n', '<C-Down>', require('smart-splits').move_cursor_down)
-      vim.keymap.set('n', '<C-Up>', require('smart-splits').move_cursor_up)
-      vim.keymap.set('n', '<C-Right>', require('smart-splits').move_cursor_right)
-      vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
-      vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
-      vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
-      vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+      vim.keymap.set({ 'n', 't' }, '<C-Left>', require('smart-splits').move_cursor_left)
+      vim.keymap.set({ 'n', 't' }, '<C-Down>', require('smart-splits').move_cursor_down)
+      vim.keymap.set({ 'n', 't' }, '<C-Up>', require('smart-splits').move_cursor_up)
+      vim.keymap.set({ 'n', 't' }, '<C-Right>', require('smart-splits').move_cursor_right)
+      vim.keymap.set({ 'n', 't' }, '<C-h>', require('smart-splits').move_cursor_left)
+      vim.keymap.set({ 'n', 't' }, '<C-j>', require('smart-splits').move_cursor_down)
+      vim.keymap.set({ 'n', 't' }, '<C-k>', require('smart-splits').move_cursor_up)
+      vim.keymap.set({ 'n', 't' }, '<C-l>', require('smart-splits').move_cursor_right)
     end,
   },
   {
@@ -163,20 +163,6 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = { signs = false },
   },
-  -- Add indentation guides
-  {
-    'lukas-reineke/indent-blankline.nvim',
-    main = 'ibl',
-    opts = {
-      indent = {
-        -- A thinner indent line
-        char = '▏',
-      },
-      scope = {
-        enabled = false,
-      },
-    },
-  },
   -- Auto pair brackets, quotes, etc.
   {
     'windwp/nvim-autopairs',
@@ -226,6 +212,53 @@ return {
     'kevinhwang91/nvim-hlslens',
     opts = {
       nearest_only = true,
+    },
+  },
+  {
+    'folke/snacks.nvim',
+    priority = 1000,
+    lazy = false,
+    opts = {
+      bigfile = { enabled = true },
+      indent = {
+        enabled = true,
+        indent = {
+          char = '▏',
+        },
+        scope = {
+          char = '▏',
+        },
+        animate = { enabled = false },
+      },
+      quickfile = { enabled = true },
+      terminal = { enabled = true },
+      words = { enabled = true },
+    },
+    keys = {
+      {
+        '<C-`>',
+        function()
+          Snacks.terminal()
+        end,
+        desc = 'Toggle terminal',
+        mode = { 'n', 't' },
+      },
+      {
+        ']w',
+        function()
+          Snacks.words.jump(vim.v.count1)
+        end,
+        desc = 'Next Reference',
+        mode = { 'n', 't' },
+      },
+      {
+        '[w',
+        function()
+          Snacks.words.jump(-vim.v.count1)
+        end,
+        desc = 'Prev Reference',
+        mode = { 'n', 't' },
+      },
     },
   },
 }

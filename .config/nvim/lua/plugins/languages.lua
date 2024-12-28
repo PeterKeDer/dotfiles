@@ -29,8 +29,9 @@ return {
       vim.g.molten_image_provider = 'wezterm'
       -- Not supported by wezterm provider
       vim.g.molten_auto_open_output = false
-      -- hmm
+
       vim.g.molten_virt_text_output = true
+      vim.g.molten_wrap_output = true
 
       vim.keymap.set(
         'n',
