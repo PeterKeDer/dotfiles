@@ -45,32 +45,29 @@ return {
     config = function()
       vim.g.gruvbox_material_background = 'hard'
       vim.g.gruvbox_material_foreground = 'material'
+      vim.g.gruvbox_material_visual = 'blue background'
 
       -- Highlight and show colors for diagnostics
       vim.g.gruvbox_material_diagnostic_line_highlight = 1
       vim.g.gruvbox_material_diagnostic_virtual_text = 'highlighted'
 
       vim.api.nvim_create_autocmd('ColorScheme', {
+        group = vim.api.nvim_create_augroup('custom_highlights_gruvboxmaterial', {}),
+        pattern = 'gruvbox-material',
         callback = function()
-          if vim.g.colors_name == 'gruvbox-material' then
-            -- Gets configuration and palette from gruvbox material
-            local configuration = vim.fn['gruvbox_material#get_configuration']()
-            local palette = vim.fn['gruvbox_material#get_palette'](
-              configuration.background,
-              configuration.foreground,
-              configuration.colors_override
-            )
+          local config = vim.fn['gruvbox_material#get_configuration']()
+          local palette = vim.fn['gruvbox_material#get_palette'](
+            config.background,
+            config.foreground,
+            config.colors_override
+          )
+          local set_hl = vim.fn['gruvbox_material#highlight']
 
-            -- NOTE: the index 1 extracts the GUI color instead of term color
-            local window_hl = { fg = palette.fg1[1], bg = palette.bg1[1] }
-            local select_hl = { fg = nil, bg = palette.bg3[1] }
-
-            -- Override completion/floating windows colors
-            vim.api.nvim_set_hl(0, 'Pmenu', window_hl)
-            vim.api.nvim_set_hl(0, 'PmenuSel', select_hl)
-            vim.api.nvim_set_hl(0, 'NormalFloat', window_hl)
-            vim.api.nvim_set_hl(0, 'TelescopeSelection', select_hl)
-          end
+          -- Override completion/floating windows colors
+          set_hl('Pmenu', palette.fg1, palette.bg1)
+          set_hl('PmenuSel', palette.none, palette.bg3)
+          set_hl('NormalFloat', palette.fg1, palette.bg1)
+          set_hl('TelescopeSelection', palette.none, palette.bg3)
         end,
       })
     end,
