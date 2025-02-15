@@ -68,6 +68,8 @@ return {
           set_hl('PmenuSel', palette.none, palette.bg3)
           set_hl('NormalFloat', palette.fg1, palette.bg1)
           set_hl('TelescopeSelection', palette.none, palette.bg3)
+
+          set_hl('DiffviewDiffText', palette.none, palette.bg_diff_blue)
         end,
       })
     end,

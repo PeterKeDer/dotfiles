@@ -156,6 +156,7 @@ return {
         --   cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
         -- },
         terraformls = {},
+        biome = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -243,8 +244,8 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        typescript = { 'prettier' },
-        typescriptreact = { 'prettier' },
+        typescript = { 'biome', 'prettier', stop_after_first = true },
+        typescriptreact = { 'biome', 'prettier', stop_after_first = true },
         python = function(bufnr)
           if require('conform').get_formatter_info('ruff_format', bufnr).available then
             return { 'ruff_format' }

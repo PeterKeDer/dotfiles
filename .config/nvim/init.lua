@@ -77,6 +77,9 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- TODO: this works, but is super slow in wezterm
+vim.opt.mousescroll = 'ver:1,hor:1'
+
 -- Better looking fill char for diffview
 vim.opt.fillchars:append({ diff = '╱' })
 

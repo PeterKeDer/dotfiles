@@ -6,9 +6,31 @@
 
 font-family = "JetBrains Mono"
 font-size = 14
+# This makes the font look better on external monitors
+font-thicken = true
+font-thicken-strength = 64
 
 # Theme
 theme = gruvbox-material
+
+# TODO: gruvbox-material somehow broke upstream in https://github.com/mbadolato/iTerm2-Color-Schemes/pull/469
+# temp fix
+palette = 1=#ea6962
+palette = 2=#a9b665
+palette = 3=#d8a657
+palette = 4=#7daea3
+palette = 5=#d3869b
+palette = 6=#89b482
+palette = 7=#ddc7a1
+# palette = 8=#141617
+palette = 9=#ea6962
+palette = 10=#a9b665
+palette = 11=#d8a657
+palette = 12=#7daea3
+palette = 13=#d3869b
+palette = 14=#89b482
+palette = 15=#ddc7a1
+
 # Darker background to match 'hard' setting
 background = 1d2021
 # Lighter color for hint
@@ -29,16 +51,25 @@ macos-titlebar-style = tabs
 shell-integration-features = no-cursor
 # TODO: this doesn't work with p10k instant prompt
 cursor-click-to-move = true
+mouse-hide-while-typing = true
+# Make cursor slightly thicker. Works around cursor hidden by indent lines
+adjust-cursor-thickness = 1
+
+# Mouse scrolls 5 lines each time
+mouse-scroll-multiplier = 1.5
 
 # Save and restore state of windows/tabs
 window-save-state = always
 
-# NOTE: ctrl/opt+arrow seems to work out of the box
-keybind = cmd+left=text:\x01
-keybind = cmd+right=text:\x05
+# HACK: ctrl-a is sent twice since we use ctrl-a as prefix key in tmux
+keybind = cmd+left=text:\x01\x01
+# keybind = cmd+right=text:\x05
 keybind = cmd+backspace=text:\x15
 keybind = cmd+delete=text:\x1b\x08
-keybind = opt+backspace=text:\x1b\x08
+# keybind = opt+backspace=text:\x1b\x08
+
+keybind = cmd+[=text:\x0f
+keybind = cmd+]=text:\x09
 
 # TODO: search workaround which writes scrollback to a file
 keybind = cmd+f=write_screen_file:paste

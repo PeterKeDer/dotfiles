@@ -11,7 +11,7 @@ config.initial_cols = 150
 
 config.color_scheme = 'Gruvbox Material (Gogh)'
 
-config.font = wezterm.font('JetBrains Mono')
+config.font = wezterm.font('JetBrains Mono', { weight = 'DemiBold' })
 config.font_size = 14
 
 -- Potential options for better looking font
@@ -147,6 +147,7 @@ config.keys = {
   -- Map navigating forward/backward in vim
   map_vim({ key = '[', mods = 'CMD' }, { key = 'o', mods = 'CTRL' }),
   map_vim({ key = ']', mods = 'CMD' }, { key = 'i', mods = 'CTRL' }),
+  -- map_vim({ key = 'Backspace', mods = 'CTRL' }, { key = 'w', mods = 'CTRL' }),
   -- Allow shift/ctrl enter in vim
   -- Source: https://stackoverflow.com/questions/16359878/how-to-map-shift-enter
   {
