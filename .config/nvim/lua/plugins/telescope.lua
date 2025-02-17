@@ -102,136 +102,122 @@ return {
       pcall(require('telescope').load_extension, 'ui-select')
       pcall(require('telescope').load_extension, 'recent_files')
 
-      local builtin = require('telescope.builtin')
-      local actions_state = require('telescope.actions.state')
-      local actions = require('telescope.actions')
-
-      vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = '[F]ind [H]elp' })
-      vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = '[F]ind [K]eymaps' })
-
-      vim.keymap.set('n', '<leader>ff', function()
-        builtin.find_files({ hidden = true })
-      end, { desc = '[F]ind [F]iles' })
-
-      vim.keymap.set('n', '<leader>faf', function()
-        builtin.find_files({ hidden = true, no_ignore = true })
-      end, { desc = '[F]ind [A]ll [F]iles' })
-
-      vim.keymap.set('n', '<leader>fag', function()
-        builtin.live_grep({
-          default_text = get_selected_text(),
-          entry_maker = helpers.grep_entry_maker(),
-          additional_args = { '--hidden', '--no-ignore' },
-        })
-      end, { desc = '[F]ind [A]ll by [G]rep' })
-
-      vim.keymap.set('n', '<leader>fs', function()
-        builtin.lsp_dynamic_workspace_symbols({
-          entry_maker = helpers.lsp_symbol_workspace_entry_maker(),
-        })
-      end, { desc = '[F]ind Workspace [S]ymbols' })
-
-      vim.keymap.set('n', '<leader>fd', function()
-        builtin.lsp_document_symbols({
-          entry_maker = helpers.lsp_symbol_entry_maker(),
-        })
-      end, { desc = '[F]ind [D]ocument Symbols' })
-
-      vim.keymap.set('n', '<leader>fx', builtin.diagnostics, { desc = '[F]ind Diagnostics' })
-
-      vim.keymap.set('n', '<leader>fw', function()
-        builtin.grep_string({
-          entry_maker = helpers.grep_entry_maker(),
-          additional_args = { '--hidden' },
-        })
-      end, { desc = '[F]ind current [W]ord' })
-
-      vim.keymap.set({ 'n', 'v' }, '<leader>fg', function()
-        builtin.live_grep({
-          default_text = get_selected_text(),
-          entry_maker = helpers.grep_entry_maker(),
-          additional_args = { '--hidden' },
-        })
-      end, { desc = '[F]ind by [G]rep' })
-
-      vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = '[F]ind [R]esume' })
-      vim.keymap.set('n', '<leader><leader>', function()
-        require('telescope').extensions.recent_files.pick({
-          only_cwd = true,
-        })
-      end, { desc = '[ ] Find recent files' })
-
-      vim.keymap.set('n', '<leader>/', function()
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown({
-          winblend = 10,
-          previewer = false,
-        }))
-      end, { desc = '[/] Fuzzily search in current buffer' })
-
-      vim.keymap.set('n', '<leader>f/', function()
-        builtin.live_grep({
-          grep_open_files = true,
-          entry_maker = helpers.grep_entry_maker(),
-          prompt_title = 'Live Grep in Open Files',
-        })
-      end, { desc = '[F]ind [/] in Open Files' })
-
-      -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>fn', function()
-        builtin.find_files({ cwd = vim.fn.stdpath('config') })
-      end, { desc = '[F]ind [N]eovim files' })
-
-      local open_commit = function(prompt_buffer)
-        local selected = actions_state.get_selected_entry()
-        actions.close(prompt_buffer)
-
-        if selected.value then
-          -- Open commit using diffview
-          vim.cmd(':DiffviewOpen ' .. selected.value .. '~1..' .. selected.value)
-        end
-      end
-
-      vim.keymap.set('n', '<leader>fc', function()
-        builtin.git_commits({
-          attach_mappings = function(_, map)
-            map({ 'n', 'i' }, '<cr>', open_commit)
-            return true
-          end,
-        })
-      end, { desc = '[F]ind Git [C]ommits' })
-
-      vim.keymap.set('n', '<leader>fbc', function()
-        builtin.git_bcommits({
-          attach_mappings = function(_, map)
-            map({ 'n', 'i' }, '<cr>', open_commit)
-            return true
-          end,
-        })
-      end, { desc = '[F]ind Git [B]uffer [C]ommits' })
-
-      vim.keymap.set({ 'x' }, '<leader>fc', function()
-        builtin.git_bcommits_range({
-          attach_mappings = function(_, map)
-            map({ 'n', 'i' }, '<cr>', open_commit)
-            return true
-          end,
-        })
-      end, { desc = '[F]ind Git [C]ommits from selection' })
+      -- local builtin = require('telescope.builtin')
+      -- local actions_state = require('telescope.actions.state')
+      -- local actions = require('telescope.actions')
+      --
+      -- vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = '[F]ind [H]elp' })
+      -- vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = '[F]ind [K]eymaps' })
+      --
+      -- vim.keymap.set('n', '<leader>ff', function()
+      --   builtin.find_files({ hidden = true })
+      -- end, { desc = '[F]ind [F]iles' })
+      --
+      -- vim.keymap.set('n', '<leader>faf', function()
+      --   builtin.find_files({ hidden = true, no_ignore = true })
+      -- end, { desc = '[F]ind [A]ll [F]iles' })
+      --
+      -- vim.keymap.set('n', '<leader>fag', function()
+      --   builtin.live_grep({
+      --     default_text = get_selected_text(),
+      --     entry_maker = helpers.grep_entry_maker(),
+      --     additional_args = { '--hidden', '--no-ignore' },
+      --   })
+      -- end, { desc = '[F]ind [A]ll by [G]rep' })
+      --
+      -- vim.keymap.set('n', '<leader>fs', function()
+      --   builtin.lsp_dynamic_workspace_symbols({
+      --     entry_maker = helpers.lsp_symbol_workspace_entry_maker(),
+      --   })
+      -- end, { desc = '[F]ind Workspace [S]ymbols' })
+      --
+      -- vim.keymap.set('n', '<leader>fd', function()
+      --   builtin.lsp_document_symbols({
+      --     entry_maker = helpers.lsp_symbol_entry_maker(),
+      --   })
+      -- end, { desc = '[F]ind [D]ocument Symbols' })
+      --
+      -- vim.keymap.set('n', '<leader>fx', builtin.diagnostics, { desc = '[F]ind Diagnostics' })
+      --
+      -- vim.keymap.set('n', '<leader>fw', function()
+      --   builtin.grep_string({
+      --     entry_maker = helpers.grep_entry_maker(),
+      --     additional_args = { '--hidden' },
+      --   })
+      -- end, { desc = '[F]ind current [W]ord' })
+      --
+      -- vim.keymap.set({ 'n', 'v' }, '<leader>fg', function()
+      --   builtin.live_grep({
+      --     default_text = get_selected_text(),
+      --     entry_maker = helpers.grep_entry_maker(),
+      --     additional_args = { '--hidden' },
+      --   })
+      -- end, { desc = '[F]ind by [G]rep' })
+      --
+      -- vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = '[F]ind [R]esume' })
+      -- vim.keymap.set('n', '<leader><leader>', function()
+      --   require('telescope').extensions.recent_files.pick({
+      --     only_cwd = true,
+      --   })
+      -- end, { desc = '[ ] Find recent files' })
+      --
+      -- vim.keymap.set('n', '<leader>/', function()
+      --   builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown({
+      --     winblend = 10,
+      --     previewer = false,
+      --   }))
+      -- end, { desc = '[/] Fuzzily search in current buffer' })
+      --
+      -- vim.keymap.set('n', '<leader>f/', function()
+      --   builtin.live_grep({
+      --     grep_open_files = true,
+      --     entry_maker = helpers.grep_entry_maker(),
+      --     prompt_title = 'Live Grep in Open Files',
+      --   })
+      -- end, { desc = '[F]ind [/] in Open Files' })
+      --
+      -- -- Shortcut for searching your Neovim configuration files
+      -- vim.keymap.set('n', '<leader>fn', function()
+      --   builtin.find_files({ cwd = vim.fn.stdpath('config') })
+      -- end, { desc = '[F]ind [N]eovim files' })
+      --
+      -- local open_commit = function(prompt_buffer)
+      --   local selected = actions_state.get_selected_entry()
+      --   actions.close(prompt_buffer)
+      --
+      --   if selected.value then
+      --     -- Open commit using diffview
+      --     vim.cmd(':DiffviewOpen ' .. selected.value .. '~1..' .. selected.value)
+      --   end
+      -- end
+      --
+      -- vim.keymap.set('n', '<leader>fc', function()
+      --   builtin.git_commits({
+      --     attach_mappings = function(_, map)
+      --       map({ 'n', 'i' }, '<cr>', open_commit)
+      --       return true
+      --     end,
+      --   })
+      -- end, { desc = '[F]ind Git [C]ommits' })
+      --
+      -- vim.keymap.set('n', '<leader>fbc', function()
+      --   builtin.git_bcommits({
+      --     attach_mappings = function(_, map)
+      --       map({ 'n', 'i' }, '<cr>', open_commit)
+      --       return true
+      --     end,
+      --   })
+      -- end, { desc = '[F]ind Git [B]uffer [C]ommits' })
+      --
+      -- vim.keymap.set({ 'x' }, '<leader>fc', function()
+      --   builtin.git_bcommits_range({
+      --     attach_mappings = function(_, map)
+      --       map({ 'n', 'i' }, '<cr>', open_commit)
+      --       return true
+      --     end,
+      --   })
+      -- end, { desc = '[F]ind Git [C]ommits from selection' })
     end,
   },
   -- Search and replace
-  {
-    'MagicDuck/grug-far.nvim',
-    opts = {},
-    keys = {
-      {
-        '<leader>far',
-        function()
-          require('grug-far').open()
-        end,
-        mode = { 'n', 'v' },
-        desc = '[F]ind [A]nd [R]eplace',
-      },
-    },
-  },
 }

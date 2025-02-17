@@ -215,49 +215,16 @@ return {
     },
   },
   {
-    'folke/snacks.nvim',
-    priority = 1000,
-    lazy = false,
-    opts = {
-      bigfile = { enabled = true },
-      indent = {
-        enabled = true,
-        indent = {
-          char = '▏',
-        },
-        scope = {
-          char = '▏',
-        },
-        animate = { enabled = false },
-      },
-      quickfile = { enabled = true },
-      terminal = { enabled = true },
-      words = { enabled = true },
-    },
+    'MagicDuck/grug-far.nvim',
+    opts = {},
     keys = {
       {
-        '<C-`>',
+        '<leader>far',
         function()
-          Snacks.terminal()
+          require('grug-far').open()
         end,
-        desc = 'Toggle terminal',
-        mode = { 'n', 't' },
-      },
-      {
-        ']w',
-        function()
-          Snacks.words.jump(vim.v.count1)
-        end,
-        desc = 'Next Reference',
-        mode = { 'n', 't' },
-      },
-      {
-        '[w',
-        function()
-          Snacks.words.jump(-vim.v.count1)
-        end,
-        desc = 'Prev Reference',
-        mode = { 'n', 't' },
+        mode = { 'n', 'v' },
+        desc = '[F]ind [A]nd [R]eplace',
       },
     },
   },
