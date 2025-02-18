@@ -70,26 +70,56 @@ return {
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
 
-          -- Accept the completion
-          ['<Tab>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+
+          -- Super tab which (in order):
+          -- 1. Accepts the completion if cmp is visible
+          -- 2. Accepts the completion if copilot is visible
+          -- 3. Expands the snippet if possible
+          -- 4. Fallback to the default completion
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            local copilot = require('copilot.suggestion')
+
+            if cmp.visible() then
+              cmp.confirm({ select = true })
+            elseif copilot.is_visible() then
+              copilot.accept()
+            elseif luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if luasnip.expand_or_locally_jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+
+          -- Accept the copilot suggestion if it's visible
+          ['<Right>'] = cmp.mapping(function(fallback)
+            local copilot = require('copilot.suggestion')
+
+            if copilot.is_visible() then
+              copilot.accept()
+            else
+              fallback()
+            end
+          end),
+
           -- ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-e>'] = cmp.mapping.close(),
 
           -- Manually trigger a completion from nvim-cmp
-          ['<C-Space>'] = cmp.mapping.complete({}),
+          ['<C-Space>'] = cmp.mapping.complete(),
 
           ['<C-l>'] = jump_next,
           ['<C-Right>'] = jump_next,
           ['<C-h>'] = jump_prev,
           ['<C-Left>'] = jump_prev,
-
-          -- This key is used to trigger copilot, close so it doesn't interfere
-          -- We also need to trigger fallback regardless
-          ['<C-/>'] = function(fallback)
-            -- NOTE: <C-/> will break in https://github.com/hrsh7th/nvim-cmp/pull/1935
-            -- unless if there's any future fixes. nvim-cmp is pinned for now
-            cmp.close()
-            fallback()
-          end,
         }),
         sources = {
           {
@@ -105,20 +135,6 @@ return {
 
       -- Load custom snipmate snippets in the snippets directory
       require('luasnip.loaders.from_snipmate').lazy_load() -- { paths = './snippets' }
-    end,
-  },
-  {
-    'github/copilot.vim',
-    init = function()
-      -- Disable copilot by default, only show on the keybind
-      vim.g.copilot_enabled = false
-      vim.keymap.set('i', '<C-/>', '<Plug>(copilot-suggest)')
-
-      -- Ctrl h/l or left/right to cycle suggestions
-      vim.keymap.set('i', '<C-h>', '<Plug>(copilot-prev)')
-      vim.keymap.set('i', '<C-l>', '<Plug>(copilot-next)')
-      vim.keymap.set('i', '<C-Left>', '<Plug>(copilot-prev)')
-      vim.keymap.set('i', '<C-Right>', '<Plug>(copilot-next)')
     end,
   },
 }

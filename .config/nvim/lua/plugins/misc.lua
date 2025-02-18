@@ -20,6 +20,7 @@ return {
             path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
           },
         },
+        lualine_x = { { 'copilot', show_colors = true }, 'fileformat', 'filetype' },
       },
       inactive_sections = {
         lualine_c = {
@@ -45,6 +46,8 @@ return {
       },
     },
   },
+  -- Copilot status for lualine
+  { 'AndreM222/copilot-lualine' },
   -- Navigate between Neovim and terminal splits
   {
     'mrjones2014/smart-splits.nvim',
@@ -170,7 +173,9 @@ return {
     -- Optional dependency
     dependencies = { 'hrsh7th/nvim-cmp' },
     config = function()
-      require('nvim-autopairs').setup({})
+      require('nvim-autopairs').setup({
+        disable_filetype = { 'TelescopePrompt', 'snacks_picker_input' },
+      })
       -- If you want to automatically add `(` after selecting a function or method
       local cmp_autopairs = require('nvim-autopairs.completion.cmp')
       local cmp = require('cmp')
