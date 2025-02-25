@@ -23,13 +23,12 @@ return {
         formatters = {
           file = {
             filename_first = true,
-            truncate = 60,
+            truncate = 80,
           },
         },
         layout = {
           preset = 'vertical',
           layout = {
-            backdrop = true,
             width = 0.8,
             min_width = 80,
             height = 0.9,
@@ -79,7 +78,10 @@ return {
       {
         '<leader><leader>',
         function()
-          Snacks.picker.smart()
+          Snacks.picker.smart({
+            multi = { 'files' },
+            hidden = true,
+          })
         end,
         desc = 'Smart Find Files',
       },
@@ -207,6 +209,20 @@ return {
         desc = '[F]ind [U]ndo',
       },
       {
+        '<leader>fq',
+        function()
+          Snacks.picker.qflist()
+        end,
+        desc = '[F]ind [Q]uickfix',
+      },
+      {
+        '<leader>fp',
+        function()
+          Snacks.picker.pick()
+        end,
+        desc = '[F]ind [P]icker',
+      },
+      {
         '<leader>/',
         function()
           Snacks.picker.lines({
@@ -216,50 +232,6 @@ return {
           })
         end,
         desc = '[F]ind in Buffer',
-      },
-      {
-        'gd',
-        function()
-          Snacks.picker.lsp_definitions({
-            filter = {
-              cwd = false,
-            },
-          })
-        end,
-        desc = '[G]oto [D]efinition',
-      },
-      {
-        'gr',
-        function()
-          Snacks.picker.lsp_references({
-            filter = {
-              cwd = false,
-            },
-          })
-        end,
-        desc = '[G]oto [R]eferences',
-      },
-      {
-        'gI',
-        function()
-          Snacks.picker.lsp_implementations({
-            filter = {
-              cwd = false,
-            },
-          })
-        end,
-        desc = '[G]oto [I]mplementations',
-      },
-      {
-        'gy',
-        function()
-          Snacks.picker.lsp_type_definitions({
-            filter = {
-              cwd = false,
-            },
-          })
-        end,
-        desc = '[G]oto T[y]pe Definitions',
       },
       {
         '<C-`>',

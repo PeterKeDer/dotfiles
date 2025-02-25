@@ -67,6 +67,8 @@ return {
     'lewis6991/gitsigns.nvim',
     opts = {
       current_line_blame = true,
+      attach_to_untracked = true,
+      sign_priority = 100,
       on_attach = function(bufnr)
         local gitsigns = require('gitsigns')
 

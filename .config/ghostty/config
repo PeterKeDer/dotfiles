@@ -4,11 +4,11 @@
 # - Copy mode
 # - Session persistence (not just tabs/layout)
 
-font-family = "JetBrains Mono"
+font-family = "Maple Mono Normal NF"
 font-size = 14
 # This makes the font look better on external monitors
 font-thicken = true
-font-thicken-strength = 64
+font-thicken-strength = 0
 
 # Theme
 theme = gruvbox-material
@@ -53,7 +53,7 @@ shell-integration-features = no-cursor
 cursor-click-to-move = true
 mouse-hide-while-typing = true
 # Make cursor slightly thicker. Works around cursor hidden by indent lines
-adjust-cursor-thickness = 1
+adjust-cursor-thickness = 2
 
 # Mouse scrolls 5 lines each time
 mouse-scroll-multiplier = 1.5

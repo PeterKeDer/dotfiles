@@ -17,6 +17,10 @@ return {
         -- enabled = false,
         auto_refresh = true,
       },
+      filetypes = {
+        yaml = true,
+        markdown = true,
+      },
     },
     config = function(_, opts)
       require('copilot').setup(opts)

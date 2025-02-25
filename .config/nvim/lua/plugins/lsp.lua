@@ -36,6 +36,19 @@ return {
           --  For example, in C this would take you to the header.
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
+          map('gd', function()
+            Snacks.picker.lsp_definitions({ filter = { cwd = false } })
+          end, '[G]oto [D]efinition')
+          map('gr', function()
+            Snacks.picker.lsp_references({ filter = { cwd = false } })
+          end, '[G]oto [R]eference')
+          map('gI', function()
+            Snacks.picker.lsp_implementations({ filter = { cwd = false } })
+          end, '[G]oto [I]mplementation')
+          map('gy', function()
+            Snacks.picker.lsp_type_definitions({ filter = { cwd = false } })
+          end, '[G]oto [Y]ype Definition')
+
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
           --    See `:help CursorHold` for information about when this is executed
@@ -145,7 +158,13 @@ return {
         --   cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
         -- },
         terraformls = {},
-        biome = {},
+        biome = {
+          cmd = { 'npx', '@biomejs/biome', 'lsp-proxy' },
+        },
+      }
+
+      local mason_skip_install = {
+        'biome',
       }
 
       -- Ensure the servers and tools above are installed
@@ -156,6 +175,20 @@ return {
         -- Style lua code
         'stylua',
       })
+
+      for i, tool in ipairs(ensure_installed) do
+        if vim.tbl_contains(mason_skip_install, tool) then
+          table.remove(ensure_installed, i)
+        end
+      end
+
+      for _, server_name in pairs(mason_skip_install) do
+        local server = servers[server_name] or {}
+        server.capabilities =
+          vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+        require('lspconfig')[server_name].setup(server)
+      end
+
       require('mason-tool-installer').setup({
         ensure_installed = ensure_installed,
       })

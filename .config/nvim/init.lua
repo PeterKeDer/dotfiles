@@ -83,6 +83,12 @@ vim.opt.mousescroll = 'ver:1,hor:1'
 -- Better looking fill char for diffview
 vim.opt.fillchars:append({ diff = '╱' })
 
+-- Disable signs to not conflict with git signs (we have highlights anyway)
+vim.diagnostic.config({
+  signs = false,
+  severity_sort = true,
+})
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
