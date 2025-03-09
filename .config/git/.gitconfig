@@ -1,0 +1,15 @@
+[core]
+    pager = delta
+
+[delta]
+    navigate = true
+    dark = true
+    syntax-theme = gruvbox-dark
+    plus-style = syntax "#32361A"
+
+[interactive]
+    diffFilter = delta --color-only
+
+[merge]
+    configstyle = zdiff3
+

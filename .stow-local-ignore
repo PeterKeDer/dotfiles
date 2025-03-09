@@ -27,4 +27,5 @@ _darcs
 \.stylua.toml
 \.luarc.json
 scripts/*
+\.DS_Store
 

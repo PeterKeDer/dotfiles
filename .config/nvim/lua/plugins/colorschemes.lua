@@ -70,6 +70,7 @@ return {
           set_hl('TelescopeSelection', palette.none, palette.bg3)
 
           set_hl('DiffviewDiffText', palette.none, palette.bg_diff_blue)
+          set_hl('DiffviewDiffDelete', palette.grey0, palette.bg_diff_red)
         end,
       })
     end,

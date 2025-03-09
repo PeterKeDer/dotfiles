@@ -1,9 +1,13 @@
 -- Plugins for managing Git
 
 return {
+  {
+    'tpope/vim-fugitive',
+  },
   -- Git client
   {
     'NeogitOrg/neogit',
+    event = 'BufReadPre',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'sindrets/diffview.nvim',

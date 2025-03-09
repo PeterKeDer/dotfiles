@@ -18,6 +18,10 @@ return {
       quickfile = { enabled = true },
       terminal = { enabled = true },
       words = { enabled = true },
+      lazygit = {
+        enabled = true,
+        configure = false,
+      },
       picker = {
         enabled = true,
         formatters = {
@@ -124,8 +128,14 @@ return {
       {
         '<leader>fc',
         function()
-          -- TODO: investigate replacing neogit workflow with just pickers
-          Snacks.picker.git_log()
+          Snacks.picker.git_log({
+            confirm = function(picker, item)
+              vim.notify(vim.inspect(item))
+              if item.commit then
+                vim.cmd(':DiffviewOpen ' .. item.commit .. '^!')
+              end
+            end,
+          })
         end,
         desc = '[F]ind Git [C]ommits',
       },
@@ -256,6 +266,14 @@ return {
         end,
         desc = 'Prev Reference',
         mode = { 'n', 't' },
+      },
+      {
+
+        '<leader>lg',
+        function()
+          Snacks.lazygit()
+        end,
+        desc = 'LazyGit',
       },
     },
   },

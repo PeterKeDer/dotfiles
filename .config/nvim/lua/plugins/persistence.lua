@@ -41,6 +41,10 @@ return {
           return
         end
 
+        if vim.g.skip_persistence_auto_restore then
+          return
+        end
+
         -- Before loading, heck no argument is passed, and not piped with stdin
         if vim.fn.argc() == 0 and not vim.g.started_with_stdin then
           require('persistence').load()

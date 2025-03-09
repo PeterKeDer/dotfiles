@@ -20,7 +20,7 @@ return {
             path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
           },
         },
-        lualine_x = { { 'copilot', show_colors = true }, 'fileformat', 'filetype' },
+        lualine_x = { { 'copilot', show_colors = true }, 'filetype' },
       },
       inactive_sections = {
         lualine_c = {
@@ -53,14 +53,14 @@ return {
     'mrjones2014/smart-splits.nvim',
     lazy = false,
     config = function()
-      vim.keymap.set({ 'n', 't' }, '<C-Left>', require('smart-splits').move_cursor_left)
-      vim.keymap.set({ 'n', 't' }, '<C-Down>', require('smart-splits').move_cursor_down)
-      vim.keymap.set({ 'n', 't' }, '<C-Up>', require('smart-splits').move_cursor_up)
-      vim.keymap.set({ 'n', 't' }, '<C-Right>', require('smart-splits').move_cursor_right)
-      vim.keymap.set({ 'n', 't' }, '<C-h>', require('smart-splits').move_cursor_left)
-      vim.keymap.set({ 'n', 't' }, '<C-j>', require('smart-splits').move_cursor_down)
-      vim.keymap.set({ 'n', 't' }, '<C-k>', require('smart-splits').move_cursor_up)
-      vim.keymap.set({ 'n', 't' }, '<C-l>', require('smart-splits').move_cursor_right)
+      vim.keymap.set({ 'n' }, '<C-Left>', require('smart-splits').move_cursor_left)
+      vim.keymap.set({ 'n' }, '<C-Down>', require('smart-splits').move_cursor_down)
+      vim.keymap.set({ 'n' }, '<C-Up>', require('smart-splits').move_cursor_up)
+      vim.keymap.set({ 'n' }, '<C-Right>', require('smart-splits').move_cursor_right)
+      vim.keymap.set({ 'n' }, '<C-h>', require('smart-splits').move_cursor_left)
+      vim.keymap.set({ 'n' }, '<C-j>', require('smart-splits').move_cursor_down)
+      vim.keymap.set({ 'n' }, '<C-k>', require('smart-splits').move_cursor_up)
+      vim.keymap.set({ 'n' }, '<C-l>', require('smart-splits').move_cursor_right)
     end,
   },
   {
@@ -164,7 +164,13 @@ return {
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false },
+    opts = {
+      signs = false,
+      highlight = {
+        pattern = [[.*<((KEYWORDS)%(\(.{-1,}\))?):]],
+      },
+      search = { pattern = [[\b(KEYWORDS)(\([^\)]*\))?:]] },
+    },
   },
   -- Auto pair brackets, quotes, etc.
   {
