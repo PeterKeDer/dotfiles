@@ -3,6 +3,7 @@ return {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
+    enabled = not vim.g.vscode,
     opts = {
       suggestion = {
         auto_trigger = true,

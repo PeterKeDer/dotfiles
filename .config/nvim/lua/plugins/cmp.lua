@@ -92,7 +92,11 @@ return {
           end, { 'i', 's' }),
 
           ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if luasnip.expand_or_locally_jumpable(-1) then
+            local copilot = require('copilot.suggestion')
+
+            if copilot.is_visible() then
+              copilot.accept()
+            elseif luasnip.expand_or_locally_jumpable(-1) then
               luasnip.jump(-1)
             else
               fallback()

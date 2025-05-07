@@ -11,6 +11,7 @@ return {
   {
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    enabled = not vim.g.vscode,
     opts = {},
   },
   { 'windwp/nvim-ts-autotag', opts = {} },

@@ -52,6 +52,7 @@ return {
   {
     'mrjones2014/smart-splits.nvim',
     lazy = false,
+    enabled = not vim.g.vscode,
     config = function()
       vim.keymap.set({ 'n' }, '<C-Left>', require('smart-splits').move_cursor_left)
       vim.keymap.set({ 'n' }, '<C-Down>', require('smart-splits').move_cursor_down)
@@ -115,6 +116,8 @@ return {
   { 'gbprod/cutlass.nvim', opts = { cut_key = 'm', override_del = true } },
   {
     'HiPhish/rainbow-delimiters.nvim',
+    -- seemed to have cause random brackets to show up?
+    enabled = not vim.g.vscode,
     init = function()
       vim.g.rainbow_delimiters = {
         highlight = {
@@ -133,6 +136,7 @@ return {
   {
     'folke/noice.nvim',
     dependencies = { 'MunifTanjim/nui.nvim' },
+    enabled = not vim.g.vscode,
     opts = {
       lsp = {
         progress = {

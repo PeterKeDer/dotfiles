@@ -125,10 +125,18 @@ vim.keymap.set('n', '[q', '<cmd>cp<cr>', { desc = 'Previous Quicklist Item' })
 vim.keymap.set('n', ']q', '<cmd>cn<cr>', { desc = 'Next Quicklist Item' })
 
 -- Map J/K/arrow keys to navigate between wrapped lines
-vim.keymap.set({ 'n', 'x' }, 'j', 'gj', { noremap = true })
-vim.keymap.set({ 'n', 'x' }, 'k', 'gk', { noremap = true })
-vim.keymap.set({ 'n', 'x' }, '<Down>', 'gj')
-vim.keymap.set({ 'n', 'x' }, '<Up>', 'gk')
+if not vim.g.vscode then
+  vim.keymap.set({ 'n', 'x' }, 'j', 'gj', { noremap = true })
+  vim.keymap.set({ 'n', 'x' }, 'k', 'gk', { noremap = true })
+  vim.keymap.set({ 'n', 'x' }, '<Down>', 'gj', { noremap = true })
+  vim.keymap.set({ 'n', 'x' }, '<Up>', 'gk', { noremap = true })
+else
+  -- NOTE: using nmap so it also works in vscode, somehow
+  vim.api.nvim_exec2('nmap j gj', { output = false })
+  vim.api.nvim_exec2('nmap k gk', { output = false })
+  vim.api.nvim_exec2('nmap <Down> gj', { output = false })
+  vim.api.nvim_exec2('nmap <Up> gk', { output = false })
+end
 
 -- Copy current file path to clipboard
 vim.keymap.set('n', '<leader>cp', function()
@@ -140,6 +148,9 @@ vim.keymap.set('v', '/', '"0y/<C-r>0<cr>', { desc = 'Search selected text' })
 
 vim.keymap.set('v', '<Tab>', '>')
 vim.keymap.set('v', '<S-Tab>', '<')
+
+-- Unbind <F1> because I keep hitting it by accident lol
+vim.keymap.set({ 'n', 'i' }, '<F1>', '<nop>')
 
 -- Highlight when yanking text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -190,6 +201,85 @@ require('lazy').setup({
     },
   },
 })
+
+if vim.g.vscode then
+  local vscode = require('vscode')
+
+  vim.keymap.set({ 'n' }, '<leader>rn', function()
+    vscode.action('editor.action.rename')
+  end, { desc = 'Rename' })
+
+  -- LSP bindings
+  vim.keymap.set({ 'n' }, 'gd', function()
+    vscode.action('editor.action.revealDefinition')
+  end, { desc = 'Go to definition' })
+
+  vim.keymap.set({ 'n' }, 'gr', function()
+    vscode.action('editor.action.goToReferences')
+  end, { desc = 'Refactor' })
+
+  vim.keymap.set({ 'n' }, 'gy', function()
+    vscode.action('editor.action.goToTypeDefinition')
+  end, { desc = 'Go to definition' })
+
+  -- Picker replacements
+  vim.keymap.set({ 'n' }, '<leader><leader>', function()
+    vscode.action('workbench.action.quickOpen')
+  end)
+
+  vim.keymap.set({ 'n' }, '<leader>ff', function()
+    vscode.action('workbench.action.quickOpen')
+  end)
+
+  vim.keymap.set({ 'n', 'x' }, '<leader>fg', function()
+    vscode.action('workbench.action.findInFiles')
+  end)
+
+  vim.keymap.set({ 'n', 'x' }, '<leader>fs', function()
+    vscode.action('workbench.action.gotoSymbol')
+  end)
+
+  vim.keymap.set({ 'n', 'x' }, '<leader>fS', function()
+    vscode.action('workbench.action.showAllSymbols')
+  end)
+
+  -- Git
+  vim.keymap.set({ 'n' }, '<leader>gg', function()
+    vscode.action('workbench.view.scm')
+  end, { desc = 'Git' })
+
+  -- vim.keymap.set({ 'n' }, '<leader>hs', function()
+  --   vscode.action('git.diff.stageHunk')
+  -- end, { desc = 'Git stage hunk' })
+
+  vim.keymap.set({ 'n' }, '<leader>hS', function()
+    vscode.action('git.stage')
+  end, { desc = 'Git stage' })
+
+  -- vim.keymap.set({ 'n' }, '<leader>hu', function()
+  --   vscode.action('git.diff.unstageHunk')
+  -- end, { desc = 'Git unstage hunk' })
+
+  vim.keymap.set({ 'n' }, '<leader>hU', function()
+    vscode.action('git.unstage')
+  end, { desc = 'Git unstage' })
+
+  vim.keymap.set({ 'n' }, '<leader>hp', function()
+    vscode.action('editor.action.dirtydiff.next')
+  end, { desc = 'Git preview' })
+
+  vim.keymap.set({ 'n', 'x' }, ']h', function()
+    vscode.action('workbench.action.editor.nextChange')
+  end, { desc = 'Next change' })
+
+  vim.keymap.set({ 'n', 'x' }, '[h', function()
+    vscode.action('workbench.action.editor.previousChange')
+  end, { desc = 'Previous change' })
+
+  vim.keymap.set({ 'n' }, '<leader>uf', function()
+    vscode.action('workbench.files.action.showActiveFileInExplorer')
+  end, { desc = 'Reveal file in explorer' })
+end
 
 vim.cmd.colorscheme('gruvbox-material')
 

@@ -1,6 +1,7 @@
 return {
   'folke/persistence.nvim',
   event = 'BufReadPre',
+  enabled = not vim.g.vscode,
   opts = {},
   keys = {
     {

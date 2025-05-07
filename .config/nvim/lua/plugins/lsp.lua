@@ -15,6 +15,7 @@ return {
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
     },
+    enabled = not vim.g.vscode,
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
@@ -268,6 +269,8 @@ return {
         lua = { 'stylua' },
         typescript = { 'biome', 'prettier', stop_after_first = true },
         typescriptreact = { 'biome', 'prettier', stop_after_first = true },
+        javascript = { 'biome', 'prettier', stop_after_first = true },
+        javascriptreact = { 'biome', 'prettier', stop_after_first = true },
         python = function(bufnr)
           if require('conform').get_formatter_info('ruff_format', bufnr).available then
             return { 'ruff_format' }
