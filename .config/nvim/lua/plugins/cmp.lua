@@ -78,12 +78,9 @@ return {
           -- 3. Expands the snippet if possible
           -- 4. Fallback to the default completion
           ['<Tab>'] = cmp.mapping(function(fallback)
-            local copilot = require('copilot.suggestion')
-
             if cmp.visible() then
               cmp.confirm({ select = true })
-            elseif copilot.is_visible() then
-              copilot.accept()
+            elseif require('utils.copilot').copilot_try_accept() then
             elseif luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             else
@@ -92,10 +89,7 @@ return {
           end, { 'i', 's' }),
 
           ['<S-Tab>'] = cmp.mapping(function(fallback)
-            local copilot = require('copilot.suggestion')
-
-            if copilot.is_visible() then
-              copilot.accept()
+            if require('utils.copilot').copilot_try_accept() then
             elseif luasnip.expand_or_locally_jumpable(-1) then
               luasnip.jump(-1)
             else
@@ -105,10 +99,7 @@ return {
 
           -- Accept the copilot suggestion if it's visible
           ['<Right>'] = cmp.mapping(function(fallback)
-            local copilot = require('copilot.suggestion')
-
-            if copilot.is_visible() then
-              copilot.accept()
+            if require('utils.copilot').copilot_try_accept() then
             else
               fallback()
             end

@@ -166,6 +166,7 @@ return {
   -- More detailed line blame
   {
     'FabijanZulj/blame.nvim',
+    enabled = not vim.g.vscode,
     keys = {
       { '<leader>tb', '<cmd>BlameToggle<cr>', desc = 'Toggle Blame' },
     },

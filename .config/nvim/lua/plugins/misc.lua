@@ -54,14 +54,14 @@ return {
     lazy = false,
     enabled = not vim.g.vscode,
     config = function()
-      vim.keymap.set({ 'n' }, '<C-Left>', require('smart-splits').move_cursor_left)
-      vim.keymap.set({ 'n' }, '<C-Down>', require('smart-splits').move_cursor_down)
-      vim.keymap.set({ 'n' }, '<C-Up>', require('smart-splits').move_cursor_up)
-      vim.keymap.set({ 'n' }, '<C-Right>', require('smart-splits').move_cursor_right)
-      vim.keymap.set({ 'n' }, '<C-h>', require('smart-splits').move_cursor_left)
-      vim.keymap.set({ 'n' }, '<C-j>', require('smart-splits').move_cursor_down)
-      vim.keymap.set({ 'n' }, '<C-k>', require('smart-splits').move_cursor_up)
-      vim.keymap.set({ 'n' }, '<C-l>', require('smart-splits').move_cursor_right)
+      vim.keymap.set({ 'n', 't' }, '<C-Left>', require('smart-splits').move_cursor_left)
+      vim.keymap.set({ 'n', 't' }, '<C-Down>', require('smart-splits').move_cursor_down)
+      vim.keymap.set({ 'n', 't' }, '<C-Up>', require('smart-splits').move_cursor_up)
+      vim.keymap.set({ 'n', 't' }, '<C-Right>', require('smart-splits').move_cursor_right)
+      vim.keymap.set({ 'n', 't' }, '<C-h>', require('smart-splits').move_cursor_left)
+      vim.keymap.set({ 'n', 't' }, '<C-j>', require('smart-splits').move_cursor_down)
+      vim.keymap.set({ 'n', 't' }, '<C-k>', require('smart-splits').move_cursor_up)
+      vim.keymap.set({ 'n', 't' }, '<C-l>', require('smart-splits').move_cursor_right)
     end,
   },
   {

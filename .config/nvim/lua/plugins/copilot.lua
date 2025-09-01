@@ -1,9 +1,21 @@
+local use_nes = false
+
 return {
+  {
+    -- This is cool but kinda slow
+    'copilotlsp-nvim/copilot-lsp',
+    enabled = not vim.g.vscode and use_nes,
+    init = function()
+      vim.g.copilot_nes_debounce = 100
+      vim.lsp.enable('copilot_ls')
+    end,
+  },
   {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
-    enabled = not vim.g.vscode,
+    -- Disabled for copilot lsp
+    enabled = not vim.g.vscode and not use_nes,
     opts = {
       suggestion = {
         auto_trigger = true,

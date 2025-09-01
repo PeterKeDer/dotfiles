@@ -4,7 +4,12 @@
 # - Copy mode
 # - Session persistence (not just tabs/layout)
 
-font-family = "Maple Mono Normal NF"
+font-family = "MonoLisa"
+font-variation=wght=400
+font-variation-italic=wght=400
+adjust-cell-height = -5%
+adjust-cell-width = -5%
+
 font-size = 14
 # This makes the font look better on external monitors
 font-thicken = true
@@ -89,6 +94,7 @@ keybind = ctrl+shift+k=goto_split:top
 keybind = ctrl+shift+down=goto_split:bottom
 keybind = ctrl+shift+j=goto_split:bottom
 
-keybind = global:cmd+l=toggle_quick_terminal
-quick-terminal-animation-duration = 0.2
+# keybind = global:cmd+l=toggle_quick_terminal
+# quick-terminal-animation-duration = 0.2
 
+keybind = shift+enter=text:\n

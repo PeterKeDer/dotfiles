@@ -33,12 +33,13 @@ return {
       indent = { enable = true, disable = { 'ruby' } },
       incremental_selection = {
         enable = true,
-        keymaps = {
-          init_selection = '<cr>',
-          node_incremental = '<cr>',
-          scope_incremental = '<C-cr>',
-          node_decremental = '<BS>',
-        },
+        -- Set manually below in init
+        -- keymaps = {
+        --   -- init_selection = '<cr>',
+        --   node_incremental = 'v',
+        --   -- scope_incremental = '<C-cr>',
+        --   node_decremental = 'V',
+        -- },
       },
       textobjects = {
         lsp_interlop = { enable = true },
@@ -98,12 +99,28 @@ return {
       },
     },
     init = function()
-      -- Set keymap in normal/visual mode for shift enter for incremental selection
-      vim.keymap.set(
-        { 'n', 'x' },
-        '<S-CR>',
-        require('nvim-treesitter.incremental_selection').init_selection
-      )
+      -- There's a bug (?) where if you don't use init selection (i.e. only node_incremental)
+      -- and if you decrement past the initial selection, you will go to the previous
+      -- selection (if exists) since the buffer selection is not cleared.
+      -- Work around this with a custom implementation and reset whenever we enter visual.
+      vim.keymap.set({ 'x' }, 'v', function()
+        require('utils.incremental-selection').node_incremental()
+      end)
+
+      vim.keymap.set({ 'x' }, 'V', function()
+        require('utils.incremental-selection').node_decremental()
+      end)
+
+      local visual_event_group = vim.api.nvim_create_augroup('visual_event', { clear = true })
+
+      vim.api.nvim_create_autocmd('ModeChanged', {
+        group = visual_event_group,
+        pattern = { '*:[vV\x16]*' },
+        callback = function()
+          -- Reset selection whenever we enter visual mode
+          require('utils.incremental-selection').reset_selection()
+        end,
+      })
     end,
   },
   -- Show context on top of object/functions/class

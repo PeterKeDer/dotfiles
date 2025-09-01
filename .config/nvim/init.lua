@@ -279,6 +279,10 @@ if vim.g.vscode then
   vim.keymap.set({ 'n' }, '<leader>uf', function()
     vscode.action('workbench.files.action.showActiveFileInExplorer')
   end, { desc = 'Reveal file in explorer' })
+
+  vim.keymap.set({ 'n' }, '<leader>tb', function()
+    vscode.action('gitlens.toggleFileBlame')
+  end, { desc = 'Toggle file blame' })
 end
 
 vim.cmd.colorscheme('gruvbox-material')
